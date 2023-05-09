@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.spba.dao.AdvertMapper">
+
+    <select id="getList" parameterType="HashMap" resultType="HashMap">
+        SELECT a.id,a.title,a.description,a.createTime,a.roleId FROM advert a
+        <where>
+            <if test="params.roleId != null">a.roleId = #{params.roleId}</if>
+        </where>
+    </select>
+
+    <select id="getListByRole" parameterType="Integer" resultType="HashMap">
+        SELECT * FROM advert WHERE JSON_CONTAINS(roleId, CONVERT(#{roleId}, CHAR))
+    </select>
+</mapper>
