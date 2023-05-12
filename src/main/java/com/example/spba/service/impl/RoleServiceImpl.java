@@ -2,18 +2,16 @@ package com.example.spba.service.impl;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.example.spba.domain.entity.Role;
 import com.example.spba.dao.RoleMapper;
+import com.example.spba.domain.entity.Role;
 import com.example.spba.service.RoleService;
-import com.example.spba.utils.Function;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.List;
 
 @Service
-public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements RoleService
-{
+public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements RoleService {
 
     @Override
     public Page<HashMap> getList(Page page, HashMap params) {
@@ -21,14 +19,12 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     }
 
     @Override
-    public Boolean checkRole(String role)
-    {
-        HashMap where = new HashMap<>();
-        where.put("root", 1);
-        where.put("role_ids", Function.strToIntArr(role, ","));
+    public Boolean checkRoleSuper(String role_ids) {
+        HashMap<String, Object> where = new HashMap<>();
+        where.put("root", role_ids);
         List<Role> roles = this.baseMapper.getAll(where);
 
-        return roles.size() > 0 ? false : true;
+        return roles.size() > 0;
     }
 
     @Override

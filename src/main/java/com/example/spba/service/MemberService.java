@@ -2,12 +2,13 @@ package com.example.spba.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.example.spba.domain.entity.Admin;
+import com.example.spba.domain.entity.Member;
 
+import javax.validation.constraints.NotBlank;
 import java.util.HashMap;
 import java.util.List;
 
-public interface AdminService extends IService<Admin>
+public interface MemberService extends IService<Member>
 {
 
     /**
@@ -33,6 +34,14 @@ public interface AdminService extends IService<Admin>
     public HashMap getInfo(HashMap params);
 
     /**
+     * 检查登录名是否重复
+     * @Param
+     * @return
+     *
+     * @param username*/
+    public Boolean checkUsername(@NotBlank String username);
+
+    /**
      * 获取拥有某角色的管理员列表
      * @param roleId
      * @return
@@ -45,4 +54,5 @@ public interface AdminService extends IService<Admin>
      * @return
      */
     public List<HashMap> getPermissionList(Integer adminId);
- }
+
+}

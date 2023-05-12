@@ -1,7 +1,7 @@
 package com.example.spba;
 
 import cn.hutool.core.date.DateUtil;
-import com.example.spba.domain.entity.Admin;
+import com.example.spba.domain.entity.Member;
 import com.example.spba.domain.es.EsBlog;
 import com.example.spba.service.EsBlogService;
 import com.example.spba.utils.RedisUtil;
@@ -43,10 +43,10 @@ public class SpbaApiTest
         map.put("password", password);
         redisUtil.set("spba:map", map);
 
-        Admin admin = new Admin();
-        admin.setUsername(username);
-        admin.setPassword(password);
-        redisUtil.set("spba:admin", admin);
+        Member member = new Member();
+        member.setLogin_code(username);
+        member.setPassword(password);
+        redisUtil.set("spba:admin", member);
 
         System.out.println(redisUtil.get("spba:username"));
         System.out.println(redisUtil.get("spba:password"));

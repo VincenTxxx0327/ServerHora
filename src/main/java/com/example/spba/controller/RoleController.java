@@ -5,7 +5,7 @@ import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.spba.domain.entity.Role;
 import com.example.spba.domain.dto.RoleDTO;
-import com.example.spba.service.AdminService;
+import com.example.spba.service.MemberService;
 import com.example.spba.service.RoleService;
 import com.example.spba.utils.Function;
 import com.example.spba.utils.R;
@@ -27,7 +27,7 @@ public class RoleController
     private RoleService roleService;
 
     @Autowired
-    private AdminService adminService;
+    private MemberService memberService;
 
     /**
      * 获取角色列表
@@ -110,7 +110,7 @@ public class RoleController
 
         // 停用角色，将与本角色相关的所有管理员强制注销下线
         if (form.getStatus().equals(0)) {
-            List<HashMap> admins = adminService.getRoleAdminAll(form.getId().intValue());
+            List<HashMap> admins = memberService.getRoleAdminAll(form.getId().intValue());
             for (HashMap admin : admins) {
                 StpUtil.logout(admin.get("id"));
             }
@@ -133,7 +133,7 @@ public class RoleController
             return R.error();
         }
 
-        List<HashMap> admins = adminService.getRoleAdminAll(roleId);
+        List<HashMap> admins = memberService.getRoleAdminAll(roleId);
         if (admins.size() > 0) {
             return R.error("有管理员使用此角色，无法删除");
         }

@@ -7,10 +7,10 @@ Date: 2022-01-03 21:09:06
 SET FOREIGN_KEY_CHECKS=0;
 
 -- ----------------------------
--- Table structure for admin
+-- Table structure for member
 -- ----------------------------
-DROP TABLE IF EXISTS `admin`;
-CREATE TABLE `admin` (
+DROP TABLE IF EXISTS `member`;
+CREATE TABLE `member` (
   `id` int NOT NULL AUTO_INCREMENT,
   `username` varchar(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '用户名',
   `password` char(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '密码',
@@ -27,10 +27,10 @@ CREATE TABLE `admin` (
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=COMPACT COMMENT='管理员表';
 
 -- ----------------------------
--- Records of admin
+-- Records of member
 -- ----------------------------
-INSERT INTO `admin` VALUES ('1', 'admin', '2fe768c4abef3b434ab7209f535f58b5', '[1]', '', '1', 'NdSr', '127.0.0.1', '2022-01-03 17:27:26', '2022-01-03 17:27:26', '2020-01-03 17:05:00');
-INSERT INTO `admin` VALUES ('2', 'style', '9d9ee979435c6ee8499f75a9abd711b0', '[2]', '', '1', 'lnNk', '127.0.0.1', '2022-01-03 17:19:29', '2022-01-03 17:19:29', '2020-01-03 17:08:00');
+INSERT INTO `member` VALUES ('1', 'member', '2fe768c4abef3b434ab7209f535f58b5', '[1]', '', '1', 'NdSr', '127.0.0.1', '2022-01-03 17:27:26', '2022-01-03 17:27:26', '2020-01-03 17:05:00');
+INSERT INTO `member` VALUES ('2', 'style', '9d9ee979435c6ee8499f75a9abd711b0', '[2]', '', '1', 'lnNk', '127.0.0.1', '2022-01-03 17:19:29', '2022-01-03 17:19:29', '2020-01-03 17:08:00');
 
 -- ----------------------------
 -- Table structure for error_log
@@ -50,16 +50,16 @@ CREATE TABLE `error_log` (
 -- ----------------------------
 -- Records of error_log
 -- ----------------------------
-INSERT INTO `error_log` VALUES ('1', '/spba/admin', 'PUT', '{\"role_arr[0]\":[\"4\"],\"status_name\":[\"true\"],\"role_ids\":[\"4,\"],\"password\":[\"\"],\"id\":[\"2\"],\"username\":[\"style\"],\"status\":[\"1\"]}', null, 'class java.lang.NullPointerException', '2022-01-03 17:08:14');
-INSERT INTO `error_log` VALUES ('2', '/spba/admin', 'PUT', '{\"role_arr[0]\":[\"4\"],\"status_name\":[\"true\"],\"role_ids\":[\"4,\"],\"password\":[\"\"],\"id\":[\"2\"],\"username\":[\"style\"],\"status\":[\"1\"]}', null, 'class java.lang.NullPointerException', '2022-01-03 17:08:15');
-INSERT INTO `error_log` VALUES ('3', '/spba/admin', 'PUT', '{\"status_name\":[\"true\"],\"role_arr[0][0]\":[\"2\"],\"role_ids\":[\"2,\"],\"password\":[\"\"],\"id\":[\"2\"],\"username\":[\"style\"],\"status\":[\"1\"]}', null, 'class java.lang.NullPointerException', '2022-01-03 17:08:22');
-INSERT INTO `error_log` VALUES ('4', '/spba/admin', 'PUT', '{\"status_name\":[\"true\"],\"role_arr[0][0]\":[\"2\"],\"role_ids\":[\"2,\"],\"password\":[\"\"],\"id\":[\"2\"],\"username\":[\"style\"],\"status\":[\"1\"]}', null, 'class java.lang.NullPointerException', '2022-01-03 17:08:37');
-INSERT INTO `error_log` VALUES ('5', '/spba/admin', 'PUT', '{\"status_name\":[\"true\"],\"role_arr[0][0]\":[\"2\"],\"role_ids\":[\"2,\"],\"password\":[\"\"],\"id\":[\"2\"],\"username\":[\"style\"],\"status\":[\"1\"]}', null, 'class java.lang.NullPointerException', '2022-01-03 17:09:23');
-INSERT INTO `error_log` VALUES ('6', '/spba/admin', 'PUT', '{\"role_arr[0]\":[\"4\"],\"status_name\":[\"true\"],\"role_ids\":[\"4,\"],\"password\":[\"\"],\"id\":[\"2\"],\"username\":[\"style\"],\"status\":[\"1\"]}', null, 'class java.lang.NullPointerException', '2022-01-03 17:11:42');
-INSERT INTO `error_log` VALUES ('7', '/spba/admin', 'PUT', '{\"status_name\":[\"false\"],\"role_arr[0][0]\":[\"2\"],\"role_ids\":[\"2,\"],\"password\":[\"\"],\"id\":[\"2\"],\"username\":[\"style\"],\"status\":[\"0\"]}', null, 'class java.lang.NullPointerException', '2022-01-03 17:11:47');
-INSERT INTO `error_log` VALUES ('8', '/spba/admin', 'PUT', '{\"status_name\":[\"false\"],\"role_arr[0][0]\":[\"2\"],\"role_ids\":[\"2,\"],\"password\":[\"\"],\"id\":[\"2\"],\"username\":[\"style\"],\"status\":[\"0\"]}', null, 'class java.lang.NullPointerException', '2022-01-03 17:11:48');
-INSERT INTO `error_log` VALUES ('9', '/spba/admin', 'PUT', '{\"status_name\":[\"true\"],\"role_arr[0][0]\":[\"2\"],\"role_ids\":[\"2,\"],\"password\":[\"\"],\"id\":[\"2\"],\"username\":[\"style\"],\"status\":[\"1\"]}', null, 'class java.lang.NullPointerException', '2022-01-03 17:13:27');
-INSERT INTO `error_log` VALUES ('10', '/spba/admin', 'PUT', '{\"status_name\":[\"true\"],\"role_arr[0][0]\":[\"2\"],\"role_ids\":[\"2,\"],\"password\":[\"\"],\"id\":[\"2\"],\"username\":[\"style\"],\"status\":[\"1\"]}', null, 'class java.lang.NullPointerException', '2022-01-03 17:16:12');
+INSERT INTO `error_log` VALUES ('1', '/spba/member', 'PUT', '{\"role_arr[0]\":[\"4\"],\"status_name\":[\"true\"],\"role_ids\":[\"4,\"],\"password\":[\"\"],\"id\":[\"2\"],\"username\":[\"style\"],\"status\":[\"1\"]}', null, 'class java.lang.NullPointerException', '2022-01-03 17:08:14');
+INSERT INTO `error_log` VALUES ('2', '/spba/member', 'PUT', '{\"role_arr[0]\":[\"4\"],\"status_name\":[\"true\"],\"role_ids\":[\"4,\"],\"password\":[\"\"],\"id\":[\"2\"],\"username\":[\"style\"],\"status\":[\"1\"]}', null, 'class java.lang.NullPointerException', '2022-01-03 17:08:15');
+INSERT INTO `error_log` VALUES ('3', '/spba/member', 'PUT', '{\"status_name\":[\"true\"],\"role_arr[0][0]\":[\"2\"],\"role_ids\":[\"2,\"],\"password\":[\"\"],\"id\":[\"2\"],\"username\":[\"style\"],\"status\":[\"1\"]}', null, 'class java.lang.NullPointerException', '2022-01-03 17:08:22');
+INSERT INTO `error_log` VALUES ('4', '/spba/member', 'PUT', '{\"status_name\":[\"true\"],\"role_arr[0][0]\":[\"2\"],\"role_ids\":[\"2,\"],\"password\":[\"\"],\"id\":[\"2\"],\"username\":[\"style\"],\"status\":[\"1\"]}', null, 'class java.lang.NullPointerException', '2022-01-03 17:08:37');
+INSERT INTO `error_log` VALUES ('5', '/spba/member', 'PUT', '{\"status_name\":[\"true\"],\"role_arr[0][0]\":[\"2\"],\"role_ids\":[\"2,\"],\"password\":[\"\"],\"id\":[\"2\"],\"username\":[\"style\"],\"status\":[\"1\"]}', null, 'class java.lang.NullPointerException', '2022-01-03 17:09:23');
+INSERT INTO `error_log` VALUES ('6', '/spba/member', 'PUT', '{\"role_arr[0]\":[\"4\"],\"status_name\":[\"true\"],\"role_ids\":[\"4,\"],\"password\":[\"\"],\"id\":[\"2\"],\"username\":[\"style\"],\"status\":[\"1\"]}', null, 'class java.lang.NullPointerException', '2022-01-03 17:11:42');
+INSERT INTO `error_log` VALUES ('7', '/spba/member', 'PUT', '{\"status_name\":[\"false\"],\"role_arr[0][0]\":[\"2\"],\"role_ids\":[\"2,\"],\"password\":[\"\"],\"id\":[\"2\"],\"username\":[\"style\"],\"status\":[\"0\"]}', null, 'class java.lang.NullPointerException', '2022-01-03 17:11:47');
+INSERT INTO `error_log` VALUES ('8', '/spba/member', 'PUT', '{\"status_name\":[\"false\"],\"role_arr[0][0]\":[\"2\"],\"role_ids\":[\"2,\"],\"password\":[\"\"],\"id\":[\"2\"],\"username\":[\"style\"],\"status\":[\"0\"]}', null, 'class java.lang.NullPointerException', '2022-01-03 17:11:48');
+INSERT INTO `error_log` VALUES ('9', '/spba/member', 'PUT', '{\"status_name\":[\"true\"],\"role_arr[0][0]\":[\"2\"],\"role_ids\":[\"2,\"],\"password\":[\"\"],\"id\":[\"2\"],\"username\":[\"style\"],\"status\":[\"1\"]}', null, 'class java.lang.NullPointerException', '2022-01-03 17:13:27');
+INSERT INTO `error_log` VALUES ('10', '/spba/member', 'PUT', '{\"status_name\":[\"true\"],\"role_arr[0][0]\":[\"2\"],\"role_ids\":[\"2,\"],\"password\":[\"\"],\"id\":[\"2\"],\"username\":[\"style\"],\"status\":[\"1\"]}', null, 'class java.lang.NullPointerException', '2022-01-03 17:16:12');
 INSERT INTO `error_log` VALUES ('11', '/spba/menu', 'GET', '{}', 'Request method \'GET\' not supported', 'class org.springframework.web.HttpRequestMethodNotSupportedException', '2022-01-03 17:20:53');
 
 -- ----------------------------
@@ -109,11 +109,11 @@ CREATE TABLE `menu` (
 -- ----------------------------
 INSERT INTO `menu` VALUES ('1', '系统', '0', 'M', '', '', 'el-icon-s-tools', '0', '1', '2022-01-03 17:15:34', '2020-01-03 17:05:00');
 INSERT INTO `menu` VALUES ('2', '首页', '1', 'C', 'home', 'home', '', '0', '1', '2020-01-03 17:05:00', '2020-01-03 17:05:00');
-INSERT INTO `menu` VALUES ('3', '管理员', '1', 'C', 'admin', 'admin:list', '', '0', '1', '2020-01-03 17:05:00', '2020-01-03 17:05:00');
-INSERT INTO `menu` VALUES ('4', '管理员查询', '3', 'F', '', 'admin:query', '', '0', '1', '2020-01-03 17:05:00', '2020-01-03 17:05:00');
-INSERT INTO `menu` VALUES ('5', '管理员新增', '3', 'F', '', 'admin:add', '', '0', '1', '2020-01-03 17:05:00', '2020-01-03 17:05:00');
-INSERT INTO `menu` VALUES ('6', '管理员编辑', '3', 'F', '', 'admin:edit', '', '0', '1', '2020-01-03 17:05:00', '2020-01-03 17:05:00');
-INSERT INTO `menu` VALUES ('7', '管理员删除', '3', 'F', '', 'admin:del', '', '0', '1', '2020-01-03 17:05:00', '2020-01-03 17:05:00');
+INSERT INTO `menu` VALUES ('3', '管理员', '1', 'C', 'member', 'member:list', '', '0', '1', '2020-01-03 17:05:00', '2020-01-03 17:05:00');
+INSERT INTO `menu` VALUES ('4', '管理员查询', '3', 'F', '', 'member:query', '', '0', '1', '2020-01-03 17:05:00', '2020-01-03 17:05:00');
+INSERT INTO `menu` VALUES ('5', '管理员新增', '3', 'F', '', 'member:add', '', '0', '1', '2020-01-03 17:05:00', '2020-01-03 17:05:00');
+INSERT INTO `menu` VALUES ('6', '管理员编辑', '3', 'F', '', 'member:edit', '', '0', '1', '2020-01-03 17:05:00', '2020-01-03 17:05:00');
+INSERT INTO `menu` VALUES ('7', '管理员删除', '3', 'F', '', 'member:del', '', '0', '1', '2020-01-03 17:05:00', '2020-01-03 17:05:00');
 INSERT INTO `menu` VALUES ('8', '角色管理', '1', 'C', 'role', 'role:list', '', '0', '1', '2020-01-03 17:05:00', '2020-01-03 17:05:00');
 INSERT INTO `menu` VALUES ('9', '查询角色', '8', 'F', '', 'role:query', '', '0', '1', '2020-01-03 17:05:00', '2020-01-03 17:05:00');
 INSERT INTO `menu` VALUES ('10', '新增角色', '8', 'F', '', 'role:add', '', '0', '1', '2020-01-03 17:05:00', '2020-01-03 17:05:00');
@@ -152,11 +152,11 @@ CREATE TABLE `operate_log` (
 -- ----------------------------
 -- Records of operate_log
 -- ----------------------------
-INSERT INTO `operate_log` VALUES ('1', '1', 'admin', '/spba/role', 'PUT', '{}', '127.0.0.1', '2022-01-03 17:07:29');
-INSERT INTO `operate_log` VALUES ('2', '1', 'admin', '/spba/role', 'PUT', '{}', '127.0.0.1', '2022-01-03 17:15:30');
-INSERT INTO `operate_log` VALUES ('3', '1', 'admin', '/spba/menu', 'PUT', '{\"status_name\":[\"true\"],\"icon\":[\"el-icon-s-tools\"],\"sort\":[\"0\"],\"type\":[\"M\"],\"path\":[\"\"],\"parent_id\":[\"0\"],\"name\":[\"系统\"],\"perms\":[\"\"],\"id\":[\"1\"],\"status\":[\"1\"]}', '127.0.0.1', '2022-01-03 17:15:34');
-INSERT INTO `operate_log` VALUES ('4', '1', 'admin', '/spba/admin', 'PUT', '{\"role_arr[0]\":[\"2\"],\"status_name\":[\"true\"],\"role_ids\":[\"2,\"],\"password\":[\"\"],\"id\":[\"2\"],\"username\":[\"style\"],\"status\":[\"1\"]}', '127.0.0.1', '2022-01-03 17:16:35');
-INSERT INTO `operate_log` VALUES ('5', '1', 'admin', '/spba/admin', 'PUT', '{\"role_arr[0]\":[\"2\"],\"status_name\":[\"true\"],\"role_ids\":[\"2,\"],\"password\":[\"\"],\"id\":[\"2\"],\"username\":[\"style\"],\"status\":[\"1\"]}', '127.0.0.1', '2022-01-03 17:16:55');
+INSERT INTO `operate_log` VALUES ('1', '1', 'member', '/spba/role', 'PUT', '{}', '127.0.0.1', '2022-01-03 17:07:29');
+INSERT INTO `operate_log` VALUES ('2', '1', 'member', '/spba/role', 'PUT', '{}', '127.0.0.1', '2022-01-03 17:15:30');
+INSERT INTO `operate_log` VALUES ('3', '1', 'member', '/spba/menu', 'PUT', '{\"status_name\":[\"true\"],\"icon\":[\"el-icon-s-tools\"],\"sort\":[\"0\"],\"type\":[\"M\"],\"path\":[\"\"],\"parent_id\":[\"0\"],\"name\":[\"系统\"],\"perms\":[\"\"],\"id\":[\"1\"],\"status\":[\"1\"]}', '127.0.0.1', '2022-01-03 17:15:34');
+INSERT INTO `operate_log` VALUES ('4', '1', 'member', '/spba/member', 'PUT', '{\"role_arr[0]\":[\"2\"],\"status_name\":[\"true\"],\"role_ids\":[\"2,\"],\"password\":[\"\"],\"id\":[\"2\"],\"username\":[\"style\"],\"status\":[\"1\"]}', '127.0.0.1', '2022-01-03 17:16:35');
+INSERT INTO `operate_log` VALUES ('5', '1', 'member', '/spba/member', 'PUT', '{\"role_arr[0]\":[\"2\"],\"status_name\":[\"true\"],\"role_ids\":[\"2,\"],\"password\":[\"\"],\"id\":[\"2\"],\"username\":[\"style\"],\"status\":[\"1\"]}', '127.0.0.1', '2022-01-03 17:16:55');
 
 -- ----------------------------
 -- Table structure for role

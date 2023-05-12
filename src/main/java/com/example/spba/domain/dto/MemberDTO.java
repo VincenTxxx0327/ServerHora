@@ -5,7 +5,7 @@ import lombok.Data;
 import javax.validation.constraints.*;
 
 @Data
-public class AdminDTO
+public class MemberDTO
 {
 
     @NotNull(message = "参数错误", groups = Update.class)
@@ -20,9 +20,7 @@ public class AdminDTO
     private String password;
 
     @NotBlank(message = "请选择角色", groups = {Save.class, Update.class})
-    private String roleIds;
-
-    private Integer status;
+    private String role_ids;
 
     /**
      * 保存时的校验分组

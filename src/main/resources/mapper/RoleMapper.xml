@@ -18,7 +18,7 @@
 
     <select id="getList" parameterType="HashMap" resultType="HashMap">
         SELECT r.id,r.name,r.permission,r.root,r.status,r.create_time,
-        ( SELECT COUNT( * ) FROM admin WHERE JSON_CONTAINS( role, CONVERT(r.id, CHAR))) as admin_count
+        ( SELECT COUNT( * ) FROM member WHERE JSON_CONTAINS( role, CONVERT(r.id, CHAR))) as admin_count
         FROM role r
         <where>
             <if test="params.name != null and params.name != ''">AND r.name LIKE "%${params.name}%"</if>

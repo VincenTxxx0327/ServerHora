@@ -4,11 +4,11 @@ import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.example.spba.domain.entity.Admin;
+import com.example.spba.domain.entity.Member;
 import com.example.spba.domain.entity.LoginLog;
 import com.example.spba.domain.entity.Role;
-import com.example.spba.dao.AdminMapper;
-import com.example.spba.service.AdminService;
+import com.example.spba.dao.MemberMapper;
+import com.example.spba.service.MemberService;
 import com.example.spba.service.LoginLogService;
 import com.example.spba.service.MenuService;
 import com.example.spba.service.RoleService;
@@ -16,13 +16,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
+import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
 @Service
-public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements AdminService
+public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member> implements MemberService
 {
 
     @Autowired
@@ -51,7 +52,7 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
         }
 
         // 验证角色状态
-        HashMap where = new HashMap();
+        HashMap<String, Object> where = new HashMap<>();
         where.put("status", 1);
         where.put("role_ids", JSONUtil.parse(info.get("role")).toBean(List.class));
         List<Role> roles = roleService.getAll(where);
@@ -87,6 +88,13 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
     }
 
     @Override
+    public Boolean checkUsername(@NotBlank String username) {
+        HashMap<String, Object> where = new HashMap<>();
+        where.put("login_code", username);
+        return getInfo(where) != null;
+    }
+
+    @Override
     public List<HashMap> getRoleAdminAll(Integer roleId) {
         return this.baseMapper.getRoleAdminAll(roleId);
     }
@@ -95,14 +103,11 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
     public List<HashMap> getPermissionList(Integer adminId)
     {
         List<HashMap> list = new ArrayList<>();
-        Admin admin = this.getById(adminId);
-        if (admin.getStatus().equals(0)) {
-            return list;
-        }
+        Member member = this.getById(adminId);
 
-        HashMap where = new HashMap();
+        HashMap<String, Object> where = new HashMap<>();
         where.put("status", 1);
-        where.put("role_ids", JSONUtil.parse(admin.getRole()).toBean(List.class));
+        where.put("role_ids", JSONUtil.parse(member.getRole_ids()).toBean(List.class));
         List<Role> roles = roleService.getAll(where);
 
         Integer root = 0;
@@ -120,7 +125,7 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
             return list;
         }
 
-        HashMap query = new HashMap();
+        HashMap<String, Object> query = new HashMap<String, Object>();
         query.put("status", 1);
         if (root.equals(0)) {
             query.put("menu_ids", menuIds);
@@ -132,10 +137,10 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
 
     private void updateLogin(Long id, String ip)
     {
-        Admin update = new Admin();
+        Member update = new Member();
         update.setId(id);
-        update.setLoginIp(ip);
-        update.setLoginTime(new Date());
+        update.setOpenid_qq(ip);
+        update.setLogin_time(new Date());
         this.baseMapper.updateById(update);
 
         LoginLog log = new LoginLog();

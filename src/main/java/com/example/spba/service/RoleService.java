@@ -20,10 +20,10 @@ public interface RoleService extends IService<Role>
 
     /**
      * 验证角色
-     * @param role
-     * @return
+     * @param role_ids 当前包含角色
+     * @return 是否超级管理员
      */
-    public Boolean checkRole(String role);
+    public Boolean checkRoleSuper(String role_ids);
 
     /**
      * 获取角色列表

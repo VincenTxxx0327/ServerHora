@@ -6,7 +6,7 @@
         SELECT ll.id,ll.login_ip,ll.create_time,a.username,
         ( SELECT GROUP_CONCAT( NAME SEPARATOR " | " ) FROM role WHERE JSON_CONTAINS ( a.role, CONVERT ( id, CHAR ) ) ) AS roles
         FROM login_log as ll
-        LEFT JOIN admin as a on ll.admin_id = a.id
+        LEFT JOIN member as a on ll.admin_id = a.id
         <where>
             <if test="params.username != null and params.username != ''">AND a.username LIKE "%${params.username}%"</if>
             <if test="params.start != null and params.start != '' and params.end != null and params.end != ''">

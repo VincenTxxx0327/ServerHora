@@ -46,10 +46,10 @@
 1.路由规范
 • 推荐使用restful命名， 规范如下：
 • GET       /admins        获取管理员列表
-• GET       /admin/{id}    获取管理员详情
-• POST      /admin         新增管理员
-• PUT       /admin         编辑管理员
-• DELETE    /admin/{id}    删除管理员
+• GET       /member/{id}    获取管理员详情
+• POST      /member         新增管理员
+• PUT       /member         编辑管理员
+• DELETE    /member/{id}    删除管理员
 
 2.controller层规范
 • 不做任何的业务逻辑操作
