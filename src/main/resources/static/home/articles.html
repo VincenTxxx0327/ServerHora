@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html class="light" lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>程序猿基地 - 文章</title>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,700;6..72,900&amp;family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+tailwind.config = {
+    darkMode: "class",
+    theme: {
+        extend: {
+            "colors": {
+                "surface-container": "#e7e8e8",
+                "on-tertiary-container": "#64003c",
+                "primary-container": "#fde400",
+                "surface-container-lowest": "#ffffff",
+                "tertiary": "#9f3069",
+                "secondary-dim": "#005388",
+                "primary-fixed": "#fde400",
+                "on-secondary": "#ecf3ff",
+                "tertiary-fixed": "#ff8cbe",
+                "secondary": "#005f9b",
+                "error-container": "#f95630",
+                "on-surface-variant": "#5a5c5c",
+                "primary-dim": "#5a5000",
+                "inverse-on-surface": "#9c9d9d",
+                "background": "#f6f6f6",
+                "tertiary-fixed-dim": "#f878b3",
+                "error-dim": "#b92902",
+                "surface-container-high": "#e1e3e3",
+                "on-tertiary-fixed": "#37001f",
+                "surface-bright": "#f6f6f6",
+                "surface-dim": "#d2d5d5",
+                "on-secondary-fixed": "#00365c",
+                "on-background": "#2d2f2f",
+                "on-error": "#ffefec",
+                "on-primary-container": "#5c5200",
+                "surface": "#f6f6f6",
+                "on-primary-fixed": "#484000",
+                "error": "#b02500",
+                "on-surface": "#2d2f2f",
+                "surface-tint": "#675c00",
+                "on-tertiary-fixed-variant": "#720546",
+                "on-primary-fixed-variant": "#675c00",
+                "on-tertiary": "#ffeff2",
+                "inverse-primary": "#fde400",
+                "surface-container-highest": "#dbdddd",
+                "tertiary-container": "#ff8cbe",
+                "secondary-fixed-dim": "#95c8ff",
+                "secondary-container": "#b1d5ff",
+                "primary-fixed-dim": "#edd600",
+                "on-error-container": "#520c00",
+                "surface-container-low": "#f0f1f1",
+                "outline-variant": "#acadad",
+                "outline": "#757777",
+                "tertiary-dim": "#90245d",
+                "secondary-fixed": "#b1d5ff",
+                "inverse-surface": "#0c0f0f",
+                "on-primary": "#fff4b7",
+                "surface-variant": "#dbdddd",
+                "primary": "#675c00",
+                "on-secondary-container": "#004a7a",
+                "on-secondary-fixed-variant": "#005489"
+            },
+            "borderRadius": {
+                "DEFAULT": "0.125rem",
+                "lg": "0.25rem",
+                "xl": "0.5rem",
+                "full": "0.75rem"
+            },
+            "fontFamily": {
+                "headline": ["Newsreader"],
+                "body": ["Space Grotesk"],
+                "label": ["Space Grotesk"]
+            }
+        },
+    },
+}
+</script>
+<style>
+.material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+.noise-overlay {
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    opacity: 0.05;
+    pointer-events: none;
+}
+.grid-pattern {
+    background-size: 40px 40px;
+    background-image: radial-gradient(circle, #dbdddd 1px, transparent 1px);
+    }
+</style>
+<link href="css/nav.css" rel="stylesheet"/>
+</head>
+<body class="bg-background font-body text-on-background min-h-screen relative overflow-x-hidden">
+<div class="fixed inset-0 noise-overlay z-[-1]"></div>
+<div class="fixed inset-0 grid-pattern z-[-2]"></div>
+<header class="site-nav">
+<a href="index.html" class="site-nav__logo">THE EDITORIALIST</a>
+<div class="site-nav__links">
+<a class="site-nav__link" href="index.html">首页</a>
+<a class="site-nav__link" href="about.html">关于我</a>
+<a class="site-nav__link site-nav__link--active" href="articles.html">文章</a>
+<a class="site-nav__link" href="projects.html">项目</a>
+<a class="site-nav__link" href="https://github.com/VincenTxxx0327" target="_blank">GitHub</a>
+</div>
+<button class="site-nav__cta">联系我</button>
+<div class="site-nav__mobile-menu">
+<span></span>
+<span></span>
+<span></span>
+</div>
+<div class="site-nav__mobile-dropdown">
+<a class="site-nav__link" href="index.html">首页</a>
+<a class="site-nav__link" href="about.html">关于我</a>
+<a class="site-nav__link site-nav__link--active" href="articles.html">文章</a>
+<a class="site-nav__link" href="projects.html">项目</a>
+<a class="site-nav__link" href="https://github.com/VincenTxxx0327" target="_blank">GitHub</a>
+</div>
+</header>
+<main class="max-w-7xl mx-auto px-6 py-12 md:py-40">
+<div class="mb-16 relative">
+<h1 class="font-headline font-black text-7xl md:text-9xl tracking-tighter mb-4 leading-none uppercase">
+The Index<span class="text-tertiary">.</span>
+</h1>
+<p class="font-body text-xl md:text-2xl max-w-2xl text-on-surface-variant">
+来自建筑意图、数字极简主义和原始技术精确性交叉点的报道。
+</p>
+<div class="absolute -top-10 -right-4 md:right-10 rotate-12 hidden lg:block">
+<div class="bg-tertiary text-white w-32 h-32 rounded-full flex items-center justify-center text-center font-mono font-bold text-xs uppercase tracking-tighter p-4 border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+Certified<br/>Authentic<br/>Thought
+</div>
+</div>
+</div>
+<div class="flex flex-wrap gap-4 mb-12 items-center">
+<span class="font-mono font-bold text-sm uppercase tracking-widest bg-on-background text-background px-3 py-1">Filter By:</span>
+<button class="px-6 py-2 border-2 border-black font-mono font-bold uppercase text-sm bg-primary-container shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all">ALL</button>
+<button class="px-6 py-2 border-2 border-black font-mono font-bold uppercase text-sm bg-white hover:bg-surface-container shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all">ESSAY</button>
+<button class="px-6 py-2 border-2 border-black font-mono font-bold uppercase text-sm bg-white hover:bg-surface-container shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all">REVIEW</button>
+<button class="px-6 py-2 border-2 border-black font-mono font-bold uppercase text-sm bg-white hover:bg-surface-container shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all">PROJECT</button>
+<button class="px-6 py-2 border-2 border-black font-mono font-bold uppercase text-sm bg-white hover:bg-surface-container shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all">TECH</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+<article class="bg-white border-4 border-black p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-all flex flex-col h-full">
+<div class="mb-4 flex items-center justify-between">
+<span class="font-mono text-xs font-bold bg-tertiary text-white px-2 py-1 uppercase tracking-widest">ESSAY</span>
+<span class="font-mono text-[10px] uppercase font-bold tracking-widest text-on-surface-variant">OCT 24, 2024</span>
+</div>
+<div class="w-full aspect-video overflow-hidden border-2 border-black mb-6">
+<img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBFZJVTIAJ-y7oXKGmDlpMDI7t8kgwVEWdzjj03W9P7oSxsQmDF0MtDT6bud49ANsIgar3KYPLQxAqNjChThmP9FvqbxUXjNbvplCOr8nRORDvXZBVURAuvjuErjKt3Wvyw05RZOYYrQUdVoq5r9EO0Q3aK0PRIORKmRwHbZpsODdHp1ipMdql6u_0hgkwAXZFUl3m-zpWHH7Kp3hZ_GBKFhmN_YvfK4HLWjxl_8oqBa_S7RXAhos8xiT5l8IG_hRyvb8dKOO2SZw"/>
+</div>
+<h2 class="font-headline font-black text-2xl leading-tight mb-4">
+The Brutalist Web: Structure Over Surface
+</h2>
+<p class="font-body text-sm mb-6 flex-grow text-on-surface-variant">
+探讨为什么现代网络对圆角和柔和阴影的痴迷是对浏览器诚实架构的退缩。
+</p>
+<div class="mt-auto pt-4 border-t-2 border-black/10">
+<a class="inline-flex items-center gap-2 font-mono font-bold uppercase tracking-widest text-xs group/link" href="#">
+阅读论文
+<span class="material-symbols-outlined text-sm group-hover/link:translate-x-1 transition-transform">arrow_forward</span>
+</a>
+</div>
+</article>
+<article class="bg-secondary-container border-4 border-black p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-all flex flex-col h-full">
+<div class="mb-4 flex items-center justify-between">
+<span class="font-mono text-xs font-bold bg-secondary text-white px-2 py-1 uppercase tracking-widest">REVIEW</span>
+<span class="font-mono text-[10px] uppercase font-bold tracking-widest text-on-surface-variant">OCT 12, 2024</span>
+</div>
+<div class="w-full aspect-video overflow-hidden border-2 border-black mb-6">
+<img class="w-full h-full object-cover grayscale opacity-90" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBPnrCsyZIHQHdrecfs4cbODB5w4YDtxKFTo2B-MaHPpjpk6-tyaocN1gnwNXdQ__suMjp1IkmZPb4wqna9KDkRihrgJevjsmsiirAIxarOyTCQQdeLaT3FLqN0rGLEpoUUKp71tZoIISbUOBfS0N7Sbh7DTiw2eHufCdOlj0GCMd4baeb1TGDEZNO-M4K15mnu-P6WTkgFCx-U4l5kT1DIqItQElA6I0rO-0_Lf9xhNy7jPF8qHGqllq1_AsdYGjHnq7TiVhi-ug"/>
+</div>
+<h3 class="font-headline font-black text-2xl leading-tight mb-4">
+Obsidian: A Second Brain in Plain Text
+</h3>
+<p class="font-body text-sm mb-6 flex-grow">
+为什么Markdown仍然是唯一真正尊重人类思想持久性的媒介。
+</p>
+<div class="mt-auto pt-4 border-t-2 border-black/10">
+<a class="inline-flex items-center gap-2 font-mono font-bold uppercase tracking-widest text-xs group/link" href="#">
+打开评论
+<span class="material-symbols-outlined text-sm group-hover/link:translate-x-1 transition-transform">arrow_forward</span>
+</a>
+</div>
+</article>
+<article class="bg-white border-4 border-black p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-all flex flex-col h-full">
+<div class="mb-4 flex items-center justify-between">
+<span class="font-mono text-xs font-bold bg-on-background text-white px-2 py-1 uppercase tracking-widest">TECH</span>
+<span class="font-mono text-[10px] uppercase font-bold tracking-widest text-on-surface-variant">SEPT 30, 2024</span>
+</div>
+<h3 class="font-headline font-black text-2xl leading-tight mb-4">
+Optimizing for Zero-JS Interactions
+</h3>
+<p class="font-body text-sm mb-6 flex-grow">
+深入探讨本系统中使用的纯CSS组件，以及为什么性能始于减法。
+</p>
+<div class="mt-auto pt-4 border-t-2 border-black/10">
+<a class="inline-flex items-center gap-2 font-mono font-bold uppercase tracking-widest text-xs group/link" href="#">
+阅读技术文章
+<span class="material-symbols-outlined text-sm group-hover/link:translate-x-1 transition-transform">arrow_forward</span>
+</a>
+</div>
+</article>
+<article class="bg-white border-4 border-black p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-all flex flex-col h-full">
+<div class="mb-4 flex items-center justify-between">
+<span class="font-mono text-xs font-bold bg-tertiary text-white px-2 py-1 uppercase tracking-widest">PROJECT</span>
+<span class="font-mono text-[10px] uppercase font-bold tracking-widest text-on-surface-variant">SEPT 15, 2024</span>
+</div>
+<h3 class="font-headline font-black text-2xl leading-tight mb-4">
+Mono-Scale Layout System
+</h3>
+<p class="font-body text-sm mb-6 flex-grow">
+构建仅使用两种尺寸的排版比例：显示和标签。一种基于约束的布局设计方法。
+</p>
+<div class="mt-auto pt-4 border-t-2 border-black/10">
+<a class="inline-flex items-center gap-2 font-mono font-bold uppercase tracking-widest text-xs group/link" href="#">
+查看项目
+<span class="material-symbols-outlined text-sm group-hover/link:translate-x-1 transition-transform">arrow_forward</span>
+</a>
+</div>
+</article>
+<article class="bg-primary-container border-4 border-black p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-all flex flex-col h-full">
+<div class="mb-4 flex items-center justify-between">
+<span class="font-mono text-xs font-bold bg-black text-primary-fixed px-2 py-1 uppercase tracking-widest">ESSAY</span>
+<span class="font-mono text-[10px] uppercase font-bold tracking-widest text-black/60">SEPT 02, 2024</span>
+</div>
+<h3 class="font-headline font-black text-2xl leading-tight mb-4">
+Why Your Brand Sucks at Boldness
+</h3>
+<p class="font-body text-sm mb-6 flex-grow text-black/80">
+对"安全科技"美学和现代数字产品中视觉个性消亡的批判。
+</p>
+<div class="mt-auto pt-4 border-t-2 border-black/20">
+<a class="inline-flex items-center gap-2 font-mono font-bold uppercase tracking-widest text-xs group/link text-black" href="#">
+阅读完整文章
+<span class="material-symbols-outlined text-sm group-hover/link:translate-x-1 transition-transform">arrow_forward</span>
+</a>
+</div>
+</article>
+<article class="bg-white border-4 border-black p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-all flex flex-col h-full">
+<div class="mb-4 flex items-center justify-between">
+<span class="font-mono text-xs font-bold bg-on-background text-white px-2 py-1 uppercase tracking-widest">TECH</span>
+<span class="font-mono text-[10px] uppercase font-bold tracking-widest text-on-surface-variant">AUG 28, 2024</span>
+</div>
+<h3 class="font-headline font-black text-2xl leading-tight mb-4">
+The Variable Font Revolution
+</h3>
+<p class="font-body text-sm mb-6 flex-grow">
+一个文件如何替代二十个文件，以及为什么排版最终变得像它所在的网络一样流畅。
+</p>
+<div class="mt-auto pt-4 border-t-2 border-black/10">
+<a class="inline-flex items-center gap-2 font-mono font-bold uppercase tracking-widest text-xs group/link" href="#">
+阅读论文
+<span class="material-symbols-outlined text-sm group-hover/link:translate-x-1 transition-transform">arrow_forward</span>
+</a>
+</div>
+</article>
+</div>
+<div class="mt-20 flex justify-center items-center gap-4">
+<button class="w-12 h-12 border-2 border-black flex items-center justify-center bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<span class="font-mono font-bold text-sm tracking-widest">PAGE 01 / 12</span>
+<button class="w-12 h-12 border-2 border-black flex items-center justify-center bg-black text-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</main>
+<footer class="bg-black dark:bg-zinc-950 text-[#FFE600] border-t-4 border-black mt-20">
+<div class="w-full px-6 py-12 flex flex-col md:flex-row justify-between items-center gap-4 max-w-7xl mx-auto">
+<a href="index.html" class="text-lg font-black text-[#FFE600] font-headline uppercase hover:opacity-80">THE EDITORIALIST</a>
+<div class="font-mono text-xs uppercase tracking-widest text-zinc-500 text-center">
+© 2024 THE EDITORIALIST. BUILT WITH RAW INTENT.
+</div>
+<nav class="flex gap-6 font-mono text-xs uppercase tracking-widest">
+<a class="text-zinc-500 hover:text-[#FFE600] underline decoration-1 underline-offset-4 opacity-80 hover:opacity-100 transition-all" href="#">隐私</a>
+<a class="text-zinc-500 hover:text-[#FFE600] underline decoration-1 underline-offset-4 opacity-80 hover:opacity-100 transition-all" href="#">归档</a>
+<a class="text-zinc-500 hover:text-[#FFE600] underline decoration-1 underline-offset-4 opacity-80 hover:opacity-100 transition-all" href="#">RSS</a>
+</nav>
+</div>
+</footer>
+<div class="md:hidden fixed bottom-6 left-6 right-6 z-50">
+<div class="bg-black border-2 border-[#FFE600] flex justify-around p-4 shadow-[8px_8px_0px_0px_rgba(253,228,0,0.3)]">
+<a class="text-[#FFE600] flex flex-col items-center gap-1" href="index.html">
+<span class="material-symbols-outlined">home</span>
+<span class="text-[10px] font-mono font-bold">首页</span>
+</a>
+<a class="text-white flex flex-col items-center gap-1" href="articles.html">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">article</span>
+<span class="text-[10px] font-mono font-bold">文章</span>
+</a>
+<a class="text-[#FFE600] flex flex-col items-center gap-1" href="projects.html">
+<span class="material-symbols-outlined">work</span>
+<span class="text-[10px] font-mono font-bold">项目</span>
+</a>
+<a class="text-[#FFE600] flex flex-col items-center gap-1" href="about.html">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px] font-mono font-bold">关于</span>
+</a>
+</div>
+</div>
+<script src="../js/nav.js"></script>
+</body></html>

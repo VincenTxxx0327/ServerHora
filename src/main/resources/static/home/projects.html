@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html class="light" lang="zh-CN">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>THE EDITORIALIST - 项目</title>
+    <link href="https://fonts.googleapis.com" rel="preconnect"/>
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&amp;family=Space+Grotesk:wght@300..700&amp;display=swap"
+          rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+          rel="stylesheet"/>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container": "#e7e8e8",
+                        "on-tertiary-container": "#64003c",
+                        "primary-container": "#fde400",
+                        "surface-container-lowest": "#ffffff",
+                        "tertiary": "#9f3069",
+                        "secondary-dim": "#005388",
+                        "primary-fixed": "#fde400",
+                        "on-secondary": "#ecf3ff",
+                        "tertiary-fixed": "#ff8cbe",
+                        "secondary": "#005f9b",
+                        "error-container": "#f95630",
+                        "on-surface-variant": "#5a5c5c",
+                        "primary-dim": "#5a5000",
+                        "inverse-on-surface": "#9c9d9d",
+                        "background": "#f6f6f6",
+                        "tertiary-fixed-dim": "#f878b3",
+                        "error-dim": "#b92902",
+                        "surface-container-high": "#e1e3e3",
+                        "on-tertiary-fixed": "#37001f",
+                        "surface-bright": "#f6f6f6",
+                        "surface-dim": "#d2d5d5",
+                        "on-secondary-fixed": "#00365c",
+                        "on-background": "#2d2f2f",
+                        "on-error": "#ffefec",
+                        "on-primary-container": "#5c5200",
+                        "surface": "#f6f6f6",
+                        "on-primary-fixed": "#484000",
+                        "error": "#b02500",
+                        "on-surface": "#2d2f2f",
+                        "surface-tint": "#675c00",
+                        "on-tertiary-fixed-variant": "#720546",
+                        "on-primary-fixed-variant": "#675c00",
+                        "on-tertiary": "#ffeff2",
+                        "inverse-primary": "#fde400",
+                        "surface-container-highest": "#dbdddd",
+                        "tertiary-container": "#ff8cbe",
+                        "secondary-fixed-dim": "#95c8ff",
+                        "secondary-container": "#b1d5ff",
+                        "primary-fixed-dim": "#edd600",
+                        "on-error-container": "#520c00",
+                        "surface-container-low": "#f0f1f1",
+                        "outline-variant": "#acadad",
+                        "outline": "#757777",
+                        "tertiary-dim": "#90245d",
+                        "secondary-fixed": "#b1d5ff",
+                        "inverse-surface": "#0c0f0f",
+                        "on-primary": "#fff4b7",
+                        "surface-variant": "#dbdddd",
+                        "primary": "#675c00",
+                        "on-secondary-container": "#004a7a",
+                        "on-secondary-fixed-variant": "#005489"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Newsreader", "serif"],
+                        "body": ["Space Grotesk", "sans-serif"],
+                        "label": ["Space Grotesk", "sans-serif"]
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        body {
+            background-image: radial-gradient(#2d2f2f 0.5px, transparent 0.5px);
+            background-size: 24px 24px;
+            background-color: #f6f6f6;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            }
+    </style>
+    <link href="css/nav.css" rel="stylesheet"/>
+</head>
+<body class="font-body text-on-surface">
+<header class="site-nav">
+    <a href="index.html" class="site-nav__logo">THE EDITORIALIST</a>
+    <div class="site-nav__links">
+        <a class="site-nav__link" href="index.html">首页</a>
+        <a class="site-nav__link" href="about.html">关于我</a>
+        <a class="site-nav__link" href="articles.html">文章</a>
+        <a class="site-nav__link site-nav__link--active" href="projects.html">项目</a>
+        <a class="site-nav__link" href="https://github.com/VincenTxxx0327" target="_blank">GitHub</a>
+    </div>
+    <button class="site-nav__cta">联系我</button>
+    <div class="site-nav__mobile-menu">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+    <div class="site-nav__mobile-dropdown">
+        <a class="site-nav__link" href="index.html">首页</a>
+        <a class="site-nav__link" href="about.html">关于我</a>
+        <a class="site-nav__link" href="articles.html">文章</a>
+        <a class="site-nav__link site-nav__link--active" href="projects.html">项目</a>
+        <a class="site-nav__link" href="https://github.com/VincenTxxx0327" target="_blank">GitHub</a>
+    </div>
+</header>
+<main class="max-w-7xl mx-auto px-6 py-40">
+    <section class="mb-20 relative">
+        <div class="absolute top-12 right-72 w-32 h-32 bg-tertiary-fixed rounded-full rotate-12 flex items-center justify-center border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] z-10 backdrop-blur-sm bg-opacity-90">
+            <span class="font-mono font-bold text-xs text-on-tertiary-fixed uppercase tracking-tighter text-center px-2">Portfolio<br/>Vol. 04</span>
+        </div>
+        <h1 class="font-headline font-black text-7xl md:text-9xl tracking-tight leading-none mb-6">
+            Program <br/>
+            <span class="bg-primary-container px-4 border-4 border-black inline-block -rotate-1 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">Experience</span>
+        </h1>
+        <p class="font-body text-xl md:text-2xl leading-relaxed text-on-surface-variant font-medium">
+            当前页面汇总了在过去十年的程序猿工作期间，具有突出价值的开发应用（部分APP未正式上线）
+        </p>
+    </section>
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-12">
+        <div class="md:col-span-12 group">
+            <article
+                    class="relative bg-surface border-4 border-black shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] overflow-hidden">
+                <div class="grid grid-cols-1 md:grid-cols-2">
+                    <div class="aspect-[4/3] md:aspect-auto border-b-4 md:border-b-0 md:border-r-4 border-black relative overflow-hidden">
+                        <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                             src="https://lh3.googleusercontent.com/aida-public/AB6AXuCSeztU7rnfTb6pq-44n05V6NRK7mjlOl2uTdU2HofSHgpTsQw-2AKEqJN6cKNABHLXaPX6tBboclXTn8E_RUG33eIjh37umTKQ1yMjVuXBiHhZxwzqbq0oEfUataNuhM3xkUUqoxviYVTGXqTOYithLFQNZEcU1m3dBrZGOPIyXBM3_NWAI1TnS3Umg-FJJC0SRwjgkzNNG6qxZkjHi4yWdwvMZPphh9PHFHTVwTeZp5SyHuXUhdMmE80Hg1CG2kwmJgNfOw9OSA"/>
+                        <div class="absolute top-6 left-6 bg-secondary text-white px-4 py-2 font-mono font-bold text-sm border-2 border-black">
+                            2025 ~ 至今
+                        </div>
+                    </div>
+                    <div class="p-8 md:p-12 flex flex-col justify-center bg-white">
+                        <h2 class="font-headline font-black text-5xl mb-6 uppercase tracking-tighter">
+                            Card Story
+                        </h2>
+                        <div class="mb-8">
+                            <span class="font-mono font-bold text-xs uppercase bg-black text-[#FFE600] px-2 py-1 mb-3 inline-block">卡牌 | 商城 | IM通讯</span>
+                            <p class="font-body text-lg leading-relaxed text-on-surface">
+                                利用自定义构建的无头CMS架构，结合边缘缓存原子部署，实现低于100毫秒的全球延迟。我们优先考虑功能密度而非装饰性膨胀。
+                            </p>
+                        </div>
+                        <a class="inline-flex items-center gap-3 font-mono font-bold text-black border-b-4 border-black pb-1 w-fit group-hover:gap-5 transition-all"
+                           href="#">
+                            去Google Play下载
+                            <span class="material-symbols-outlined">arrow_forward</span>
+                        </a>
+                    </div>
+                </div>
+            </article>
+        </div>
+        <div class="md:col-span-7 group">
+            <article
+                    class="bg-surface-container-lowest border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] h-full flex flex-col">
+                <div class="p-6 border-b-4 border-black bg-primary-container flex justify-between items-center">
+                    <h3 class="font-headline font-black text-3xl uppercase">Kinetic Type Lab</h3>
+                    <span class="material-symbols-outlined font-bold">code</span>
+                </div>
+                <div class="aspect-video relative overflow-hidden border-b-4 border-black">
+                    <img class="w-full h-full object-cover"
+                         src="https://lh3.googleusercontent.com/aida-public/AB6AXuDuxf7YB2eGDA3TFY5D4oSve6cnEMfQhNi7hvfbcVCT4H5_1kNC9LkHbbAX0TipLqeMq63BdFrgCyxqJX55bJM824BiBfmXRa85l1iXkL0KTke-tYfQ2zbayAp5Z7d0VryHLK-WYoHOwQQhRebukSOadKr0G7PA3wgiPCoX2R1NkwdOuvvgnBj1STBK5-1slfr9TvQifg6OTAB2842Dp1iKU0JG7lKOSR7IFpNCrvgQH1qTGJejIHElPEpwuUc3qHXwm389HW0TuQ"/>
+                </div>
+                <div class="p-8 flex-grow">
+                    <div class="mb-6">
+                        <span class="font-mono font-bold text-xs uppercase text-secondary mb-2 block tracking-widest">Methodology</span>
+                        <p class="font-body text-md text-on-surface-variant">
+                            一个WebGL和Canvas API实验的 playground，专注于可变排版和流体动力学的交叉点。每次交互都通过自定义物理引擎计算。
+                        </p>
+                    </div>
+                    <a class="inline-flex items-center gap-2 font-mono font-bold bg-black text-white px-4 py-2 border-2 border-black hover:bg-surface hover:text-black transition-colors"
+                       href="#">
+                        <span class="material-symbols-outlined text-sm">link</span>
+                        GitHub仓库
+                    </a>
+                </div>
+            </article>
+        </div>
+        <div class="md:col-span-5 relative group">
+            <div class="absolute -top-6 -right-6 z-20 w-24 h-24 bg-tertiary text-white rounded-full flex items-center justify-center border-2 border-black rotate-12 shadow-lg">
+                <span class="font-mono font-black text-xs uppercase text-center">Experimental<br/>Only</span>
+            </div>
+            <article class="bg-white border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] h-full flex flex-col">
+                <div class="aspect-square relative overflow-hidden border-b-4 border-black">
+                    <img class="w-full h-full object-cover"
+                         src="https://lh3.googleusercontent.com/aida-public/AB6AXuD3BObD8jkvumTZ7_JQR1POkhUkgd_nzzO3Idi3LkY8tAvN6Is2iY7vsvuHD_CZbylvLdLv9gC1KkZZ3KlQswHE6rXytA4fMfvcEiwRyI5hVXFEyjvQA7CyeKgh9qtm2h-kLDh6dk0WXDlVVpYgCl7umChdOfxDNDl3WA1R8VSztS7R-CXe8qBm1rKJ-5Drj6zpxPygI3Oq5uQZNAcWEZXpLdAzzGKxu309zY7DubQLGTKXWQqQLfIUIJgHFFw-ullKHJwFnNLU2A"/>
+                </div>
+                <div class="p-8 bg-surface-container-high flex-grow">
+                    <h3 class="font-headline font-black text-3xl mb-4 uppercase">Void UI Kit</h3>
+                    <div class="mb-6">
+                        <span class="font-mono font-bold text-xs uppercase text-on-surface-variant mb-2 block">Methodology</span>
+                        <p class="font-body text-sm text-on-surface-variant">
+                            将用户组件解构为其基本逻辑要素。使用Tailwind CSS构建，并严格遵守WCAG 2.1可访问性标准。
+                        </p>
+                    </div>
+                    <a class="font-mono font-bold text-black flex items-center gap-2 underline decoration-2 underline-offset-4"
+                       href="#">
+                        源码
+                    </a>
+                </div>
+            </article>
+        </div>
+        <div class="md:col-span-12 group">
+            <article
+                    class="bg-black text-white border-4 border-black shadow-[12px_12px_0px_0px_#fde400] overflow-hidden">
+                <div class="flex flex-col md:flex-row">
+                    <div class="p-8 md:p-16 md:w-1/2 flex flex-col justify-center order-2 md:order-1">
+                        <h2 class="font-headline font-black text-5xl mb-6 uppercase text-primary-container">The Archive
+                            DB</h2>
+                        <div class="mb-8">
+                            <p class="font-body text-xl leading-relaxed text-surface-container mb-6 italic">
+                                "关系数据可视化的大师班。" — 评论
+                            </p>
+                            <span class="font-mono font-bold text-xs uppercase bg-white text-black px-2 py-1 mb-3 inline-block">Methodology</span>
+                            <p class="font-body text-md text-surface-variant">
+                                使用PostgreSQL和自定义GraphQL层设计，管理超过120万条遗留条目。UI利用新野兽派网格在海量数据集中保持可读性。
+                            </p>
+                        </div>
+                        <div class="flex gap-4">
+                            <a class="bg-primary-container text-black font-mono font-bold px-8 py-3 border-2 border-primary-container hover:bg-transparent hover:text-primary-container transition-all"
+                               href="#">
+                                GitHub
+                            </a>
+                            <a class="border-2 border-white text-white font-mono font-bold px-8 py-3 hover:bg-white hover:text-black transition-all"
+                               href="#">
+                                在线演示
+                            </a>
+                        </div>
+                    </div>
+                    <div class="md:w-1/2 h-64 md:h-auto order-1 md:order-2 border-b-4 md:border-b-0 md:border-l-4 border-white bg-surface-container-highest">
+                        <img class="w-full h-full object-cover opacity-80 mix-blend-multiply"
+                             src="https://lh3.googleusercontent.com/aida-public/AB6AXuAYt2tmJgDf6cIlOQgrelf4gfUl0iPTw1hsXtzkangD8P8Pc-oaLOAOSNmS7sGP5miWbAu6COemhnzi4941ouuKH-gvoc7aVexFy2M87AmZbrp0gRtnLI6fPZ1P4CZuILrfoC9e4a4gjwh3xvC7pSsGXO8ZbDrhenYPaHYUyIlEX-cZb43jwD2-JYE67EOOjg77cKNHp6VdDX59eDyRs_d570q6yS1cHfehxNjt4HkSTxCg0nFS3gepYI1knwQkfezuLGBQTUkDQQ"/>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </div>
+    <div class="mt-24 flex flex-col items-center">
+        <div class="h-1 w-full bg-black mb-12"></div>
+        <button class="group relative inline-block">
+            <div class="absolute inset-0 bg-black translate-x-2 translate-y-2 group-hover:translate-x-3 group-hover:translate-y-3 transition-transform"></div>
+            <div class="relative bg-white border-4 border-black px-12 py-6 font-mono font-black text-2xl uppercase tracking-widest group-active:translate-x-1 group-active:translate-y-1 transition-all">
+                加载更多项目
+            </div>
+        </button>
+    </div>
+</main>
+<footer class="bg-black dark:bg-zinc-950 text-[#FFE600] font-mono text-xs uppercase tracking-widest w-full px-6 py-12 flex flex-col md:flex-row justify-between items-center gap-4 border-t-4 border-black">
+    <a href="index.html" class="text-lg font-black text-[#FFE600] font-headline hover:opacity-80">THE EDITORIALIST</a>
+    <div class="flex gap-8">
+        <a class="text-zinc-500 hover:text-[#FFE600] underline" href="#">隐私</a>
+        <a class="text-zinc-500 hover:text-[#FFE600] underline" href="#">归档</a>
+        <a class="text-zinc-500 hover:text-[#FFE600] underline" href="#">RSS</a>
+    </div>
+    <div class="text-zinc-500 text-center md:text-right">
+        © 2024 THE EDITORIALIST. BUILT WITH RAW INTENT.
+    </div>
+</footer>
+<script src="../js/nav.js"></script>
+</body>
+</html>

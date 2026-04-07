@@ -28,6 +28,7 @@ public class SaTokenConfigure implements WebMvcConfigurer
                     .notMatch("/register")
                     .notMatch("/advert")
                     .notMatch("/advert/{id}")
+                    .notMatch("/home/**")
                     .check(r -> StpUtil.checkLogin());
 
             // 权限认证：匹配restful风格路由、多个条件一起使用
