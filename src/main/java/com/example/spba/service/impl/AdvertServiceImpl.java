@@ -5,7 +5,9 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.spba.dao.AdvertMapper;
 import com.example.spba.domain.entity.Advert;
 import com.example.spba.service.AdvertService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 
@@ -16,7 +18,10 @@ import java.util.HashMap;
  * Purpose: 此类用于..
  */
 @Service
+@Transactional
 public class AdvertServiceImpl extends ServiceImpl<AdvertMapper, Advert> implements AdvertService {
+
+    @Transactional
     @Override
     public Page<HashMap> getList(Page page, HashMap params) {
         return this.baseMapper.getList(page, params);
