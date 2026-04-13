@@ -58,7 +58,7 @@
         const currentPage = window.location.pathname.split('/').pop() || 'index.html';
         
         nav.innerHTML = `
-            <a href="index.html" class="site-nav__logo">THE EDITORIALIST</a>
+            <a href="index.html" class="site-nav__logo">THE ENGINEER</a>
             
             <div class="site-nav__links">
                 <a class="site-nav__link ${currentPage === 'index.html' ? 'site-nav__link--active' : ''}" href="index.html">Home</a>

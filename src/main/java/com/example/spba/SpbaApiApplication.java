@@ -11,5 +11,6 @@ public class SpbaApiApplication
     public static void main(String[] args)
     {
         SpringApplication.run(SpbaApiApplication.class, args);
+        System.out.println("http://localhost:8082/spba-api/home");
     }
 }
