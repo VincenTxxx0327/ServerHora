@@ -24,6 +24,8 @@ public class MyWebMvcConfig implements WebMvcConfigurer {
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addRedirectViewController("/home/index", "/home/index.html");
         registry.addRedirectViewController("/home", "/home/index.html");
+        registry.addRedirectViewController("/static", "/home/index.html");
+        registry.addRedirectViewController("/image", "/home/index.html");
     }
 
     /**
