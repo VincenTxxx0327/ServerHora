@@ -12,5 +12,7 @@ public class SpbaApiApplication
     {
         SpringApplication.run(SpbaApiApplication.class, args);
         System.out.println("http://localhost:8082/spba-api/home");
+        System.out.println("http://192.168.11.31:8082/spba-api/home");
+        System.out.println("http://vincentxxx0327.51vip.biz/spba-api/home");
     }
 }

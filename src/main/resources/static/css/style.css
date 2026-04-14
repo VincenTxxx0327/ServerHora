@@ -428,7 +428,30 @@ body {
         grid-template-columns: 1fr;
     }
 }
-
+@media (max-width: 768px) {
+            .timeline-container::before {
+                left: 24px;
+                transform: none;
+            }
+            .timeline-container > div {
+                grid-template-columns: 1fr !important;
+            }
+            .timeline-container > div > div:nth-child(2) {
+                left: 24px !important;
+                transform: translateX(-50%) !important;
+                order: 1 !important;
+            }
+            .timeline-container > div > div {
+                order: 2 !important;
+                margin-left: 48px !important;
+                margin-right: 0 !important;
+                display: block !important;
+            }
+            .timeline-container > div > div:nth-child(2) {
+                order: 1 !important;
+                margin-left: 0 !important;
+            }
+        }
 @keyframes fadeIn {
     from {
         opacity: 0;
