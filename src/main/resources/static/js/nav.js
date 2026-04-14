@@ -4,6 +4,7 @@
     function initNavigation() {
         highlightCurrentPage();
         initMobileMenu();
+        initNavTracking();
     }
 
     function highlightCurrentPage() {
@@ -47,6 +48,40 @@
             link.addEventListener('click', function() {
                 menuButton.classList.remove('site-nav__mobile-menu--open');
                 dropdown.classList.remove('site-nav__mobile-dropdown--open');
+            });
+        });
+    }
+
+    function initNavTracking() {
+        if (typeof TrackSDK === 'undefined') return;
+
+        document.querySelectorAll('.site-nav__link').forEach(function(link) {
+            link.addEventListener('click', function() {
+                var href = this.getAttribute('href') || '';
+                var text = this.textContent.trim();
+                var isExternal = this.getAttribute('target') === '_blank';
+                var isGithub = href.indexOf('github.com') !== -1;
+
+                if (isGithub) {
+                    TrackSDK.trackExternalLink('nav-click', 'GitHub: ' + text, href);
+                } else if (isExternal) {
+                    TrackSDK.trackExternalLink('nav-click', text, href);
+                } else if (href && href.indexOf('#') !== 0 && href.indexOf('javascript') !== 0) {
+                    TrackSDK.trackClick('nav-click', text, this.id || '');
+                }
+            });
+        });
+
+        document.querySelectorAll('.site-nav__logo').forEach(function(logo) {
+            logo.addEventListener('click', function() {
+                var href = this.getAttribute('href') || 'index.html';
+                TrackSDK.trackClick('nav-click', 'Logo', this.id || '');
+            });
+        });
+
+        document.querySelectorAll('.site-nav__cta').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                TrackSDK.trackAction('nav-click', 'CTA: ' + this.textContent.trim());
             });
         });
     }

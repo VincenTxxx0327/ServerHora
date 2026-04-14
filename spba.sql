@@ -178,3 +178,26 @@ CREATE TABLE `role` (
 -- ----------------------------
 INSERT INTO `role` VALUES ('1', '超级管理员', '[0]', '1', '1', '2020-01-03 17:05:00', '2020-01-03 17:05:00');
 INSERT INTO `role` VALUES ('2', '技术', '[2, 5, 6, 11, 12, 1, 3, 8]', '0', '1', '2022-01-03 17:15:30', '2020-01-03 17:07:29');
+
+-- ----------------------------
+-- Table structure for track_event
+-- ----------------------------
+DROP TABLE IF EXISTS `track_event`;
+CREATE TABLE `track_event` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `module` varchar(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '模块名称',
+  `content` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '事件内容',
+  `category` tinyint NOT NULL DEFAULT '1' COMMENT '事件类别（1点击 2页面展示 3跳转页面 4跳转外链 5触发行为）',
+  `trigger_time` datetime NOT NULL COMMENT '触发时间',
+  `page_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT '' COMMENT '当前页面URL',
+  `element_id` varchar(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT '' COMMENT '触发元素标识',
+  `user_agent` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT '' COMMENT '浏览器UA',
+  `ip` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT '' COMMENT '用户IP',
+  `session_id` varchar(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT '' COMMENT '会话ID',
+  `extra_data` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT '' COMMENT '扩展数据(JSON)',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`) USING BTREE,
+  KEY `idx_module` (`module`),
+  KEY `idx_category` (`category`),
+  KEY `idx_trigger_time` (`trigger_time`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC COMMENT='前端埋点事件表';

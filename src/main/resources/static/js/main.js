@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initSmoothScroll();
     initScrollAnimations();
     initCardHoverEffects();
+    initTrackEvents();
 });
 
 function initSmoothScroll() {
@@ -88,5 +89,69 @@ function addParallaxEffect() {
         if (hero) {
             hero.style.transform = `translateY(${scrolled * 0.3}px)`;
         }
+    });
+}
+
+function initTrackEvents() {
+    if (typeof TrackSDK === 'undefined') return;
+    var pageName = window.location.pathname.split('/').pop() || 'index.html';
+    if (document.referrer) {
+        TrackSDK.report({
+            module: 'site-show-referrer',
+            content: pageName,
+            category: TrackSDK.CATEGORY.PAGE_VIEW,
+            extraData: { referrer: document.referrer }
+        });
+    } else {
+        TrackSDK.trackPageView('site-show', pageName);
+    }
+
+    document.querySelectorAll('.project-card').forEach(function(card) {
+        card.addEventListener('click', function() {
+            var title = this.querySelector('.project-title, h3, h2');
+            TrackSDK.trackClick('project', title ? title.textContent.trim() : 'project-card', this.id || '');
+        });
+    });
+
+    document.querySelectorAll('.article-item').forEach(function(article) {
+        article.addEventListener('click', function() {
+            var title = this.querySelector('.article-title, h3, h2');
+            TrackSDK.trackClick('article', title ? title.textContent.trim() : 'article-item', this.id || '');
+        });
+    });
+
+    document.querySelectorAll('.video-card').forEach(function(card) {
+        card.addEventListener('click', function() {
+            var title = this.querySelector('.video-title, h3, h2');
+            TrackSDK.trackClick('video', title ? title.textContent.trim() : 'video-card', this.id || '');
+        });
+    });
+
+    document.querySelectorAll('a[target="_blank"]').forEach(function(link) {
+        link.addEventListener('click', function() {
+            var href = this.getAttribute('href') || '';
+            var isGithub = href.indexOf('github.com') !== -1;
+            if (isGithub) {
+                TrackSDK.trackExternalLink('link-github', this.textContent.trim(), href);
+            } else {
+                TrackSDK.trackExternalLink('link-href', this.textContent.trim(), href);
+            }
+        });
+    });
+
+    document.querySelectorAll('a[href]:not([href^="#"]):not([href^="javascript"]):not([target="_blank"])').forEach(function(link) {
+        link.addEventListener('click', function() {
+            if (this.hostname === window.location.hostname) {
+                var fromPage = window.location.pathname.split('/').pop() || 'index.html';
+                var toPage = this.href.split('/').pop() || 'index.html';
+                TrackSDK.trackPageRedirect('site-leave', fromPage + '->' + toPage, this.href);
+            }
+        });
+    });
+
+    document.querySelectorAll('.site-nav__cta, button.cta, .cta-button').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            TrackSDK.trackAction('cta', this.textContent.trim());
+        });
     });
 }

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.spba.dao.TrackEventMapper">
+
+    <select id="getList" parameterType="HashMap" resultType="HashMap">
+        SELECT id,module,content,category,trigger_time,page_url,element_id,user_agent,ip,session_id,extra_data,create_time FROM track_event
+        <where>
+            <if test="params.module != null and params.module != ''">AND module LIKE "%${params.module}%"</if>
+            <if test="params.category != null">AND category = #{params.category}</if>
+            <if test="params.start != null and params.start != '' and params.end != null and params.end != ''">
+                AND trigger_time between #{params.start} and #{params.end}
+            </if>
+        </where>
+        ORDER BY id DESC
+    </select>
+
+</mapper>
