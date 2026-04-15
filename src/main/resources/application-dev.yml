@@ -21,8 +21,8 @@ spring:
     multipart:
       max-file-size: 50MB      # 单个文件大小
       max-request-size: 500MB  # 总上传的数据大小
-  mvc:
-    log-request-details: true
+    mvc:
+      log-request-details: true
   # 数据库配置
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
