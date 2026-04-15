@@ -92,7 +92,10 @@ tailwind.config = {
 .grid-pattern {
     background-size: 40px 40px;
     background-image: radial-gradient(circle, #dbdddd 1px, transparent 1px);
-    }
+}
+.filter-btn-active {
+    background-color: #fde400 !important;
+}
 </style>
 <link href="css/nav.css" rel="stylesheet"/>
 </head>
@@ -130,7 +133,7 @@ The Index<span class="text-tertiary">.</span>
 <p class="font-body text-xl md:text-2xl max-w-1xl text-on-surface-variant">
     写作不是学习的终点，而是最高效的学习方法本身。
     <br>
-    构建知识网络，促进长期记忆：孤立的知识点极易遗忘。通过写作，主动构建知识图谱的过程，符合认知科学中的“精细加工”原理，能极大提升记忆深度和提取速度。
+    构建知识网络，促进长期记忆：孤立的知识点极易遗忘。通过写作，主动构建知识图谱的过程，符合认知科学中的"精细加工"原理，能极大提升记忆深度和提取速度。
 </p>
 <div class="absolute -top-10 -right-4 md:right-10 rotate-12 hidden lg:block">
 <div class="bg-tertiary text-white w-32 h-32 rounded-full flex items-center justify-center text-center font-mono font-bold text-2xl uppercase tracking-tighter p-4 border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
@@ -140,134 +143,22 @@ The Index<span class="text-tertiary">.</span>
 </div>
 <div class="flex flex-wrap gap-4 mb-12 items-center">
 <span class="font-mono font-bold text-sm uppercase tracking-widest bg-on-background text-background px-3 py-1">Filter By:</span>
-<button class="px-6 py-2 border-2 border-black font-mono font-bold uppercase text-sm bg-primary-container shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all">ALL</button>
-<button class="px-6 py-2 border-2 border-black font-mono font-bold uppercase text-sm bg-white hover:bg-surface-container shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all">ESSAY</button>
-<button class="px-6 py-2 border-2 border-black font-mono font-bold uppercase text-sm bg-white hover:bg-surface-container shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all">REVIEW</button>
-<button class="px-6 py-2 border-2 border-black font-mono font-bold uppercase text-sm bg-white hover:bg-surface-container shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all">PROJECT</button>
-<button class="px-6 py-2 border-2 border-black font-mono font-bold uppercase text-sm bg-white hover:bg-surface-container shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all">TECH</button>
+<button data-category="" class="filter-btn filter-btn-active px-6 py-2 border-2 border-black font-mono font-bold uppercase text-sm shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all">ALL</button>
+<button data-category="ESSAY" class="filter-btn px-6 py-2 border-2 border-black font-mono font-bold uppercase text-sm bg-white hover:bg-surface-container shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all">ESSAY</button>
+<button data-category="REVIEW" class="filter-btn px-6 py-2 border-2 border-black font-mono font-bold uppercase text-sm bg-white hover:bg-surface-container shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all">REVIEW</button>
+<button data-category="PROJECT" class="filter-btn px-6 py-2 border-2 border-black font-mono font-bold uppercase text-sm bg-white hover:bg-surface-container shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all">PROJECT</button>
+<button data-category="TECH" class="filter-btn px-6 py-2 border-2 border-black font-mono font-bold uppercase text-sm bg-white hover:bg-surface-container shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all">TECH</button>
 </div>
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-<!--<article class="bg-white border-4 border-black p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-all flex flex-col h-full">-->
-<!--<div class="mb-4 flex items-center justify-between">-->
-<!--<span class="font-mono text-xs font-bold bg-tertiary text-white px-2 py-1 uppercase tracking-widest">ESSAY</span>-->
-<!--<span class="font-mono text-[10px] uppercase font-bold tracking-widest text-on-surface-variant">OCT 24, 2024</span>-->
-<!--</div>-->
-<!--<div class="w-full aspect-video overflow-hidden border-2 border-black mb-6">-->
-<!--<img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBFZJVTIAJ-y7oXKGmDlpMDI7t8kgwVEWdzjj03W9P7oSxsQmDF0MtDT6bud49ANsIgar3KYPLQxAqNjChThmP9FvqbxUXjNbvplCOr8nRORDvXZBVURAuvjuErjKt3Wvyw05RZOYYrQUdVoq5r9EO0Q3aK0PRIORKmRwHbZpsODdHp1ipMdql6u_0hgkwAXZFUl3m-zpWHH7Kp3hZ_GBKFhmN_YvfK4HLWjxl_8oqBa_S7RXAhos8xiT5l8IG_hRyvb8dKOO2SZw"/>-->
-<!--</div>-->
-<!--<h2 class="font-headline font-black text-2xl leading-tight mb-4">-->
-<!--The Brutalist Web: Structure Over Surface-->
-<!--</h2>-->
-<!--<p class="font-body text-sm mb-6 flex-grow text-on-surface-variant">-->
-<!--探讨为什么现代网络对圆角和柔和阴影的痴迷是对浏览器诚实架构的退缩。-->
-<!--</p>-->
-<!--<div class="mt-auto pt-4 border-t-2 border-black/10">-->
-<!--<a class="inline-flex items-center gap-2 font-mono font-bold uppercase tracking-widest text-xs group/link" href="#">-->
-<!--阅读论文-->
-<!--<span class="material-symbols-outlined text-sm group-hover/link:translate-x-1 transition-transform">arrow_forward</span>-->
-<!--</a>-->
-<!--</div>-->
-<!--</article>-->
-<!--<article class="bg-secondary-container border-4 border-black p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-all flex flex-col h-full">-->
-<!--<div class="mb-4 flex items-center justify-between">-->
-<!--<span class="font-mono text-xs font-bold bg-secondary text-white px-2 py-1 uppercase tracking-widest">REVIEW</span>-->
-<!--<span class="font-mono text-[10px] uppercase font-bold tracking-widest text-on-surface-variant">OCT 12, 2024</span>-->
-<!--</div>-->
-<!--<div class="w-full aspect-video overflow-hidden border-2 border-black mb-6">-->
-<!--<img class="w-full h-full object-cover grayscale opacity-90" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBPnrCsyZIHQHdrecfs4cbODB5w4YDtxKFTo2B-MaHPpjpk6-tyaocN1gnwNXdQ__suMjp1IkmZPb4wqna9KDkRihrgJevjsmsiirAIxarOyTCQQdeLaT3FLqN0rGLEpoUUKp71tZoIISbUOBfS0N7Sbh7DTiw2eHufCdOlj0GCMd4baeb1TGDEZNO-M4K15mnu-P6WTkgFCx-U4l5kT1DIqItQElA6I0rO-0_Lf9xhNy7jPF8qHGqllq1_AsdYGjHnq7TiVhi-ug"/>-->
-<!--</div>-->
-<!--<h3 class="font-headline font-black text-2xl leading-tight mb-4">-->
-<!--Obsidian: A Second Brain in Plain Text-->
-<!--</h3>-->
-<!--<p class="font-body text-sm mb-6 flex-grow">-->
-<!--为什么Markdown仍然是唯一真正尊重人类思想持久性的媒介。-->
-<!--</p>-->
-<!--<div class="mt-auto pt-4 border-t-2 border-black/10">-->
-<!--<a class="inline-flex items-center gap-2 font-mono font-bold uppercase tracking-widest text-xs group/link" href="#">-->
-<!--打开评论-->
-<!--<span class="material-symbols-outlined text-sm group-hover/link:translate-x-1 transition-transform">arrow_forward</span>-->
-<!--</a>-->
-<!--</div>-->
-<!--</article>-->
-<!--<article class="bg-white border-4 border-black p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-all flex flex-col h-full">-->
-<!--<div class="mb-4 flex items-center justify-between">-->
-<!--<span class="font-mono text-xs font-bold bg-on-background text-white px-2 py-1 uppercase tracking-widest">TECH</span>-->
-<!--<span class="font-mono text-[10px] uppercase font-bold tracking-widest text-on-surface-variant">SEPT 30, 2024</span>-->
-<!--</div>-->
-<!--<h3 class="font-headline font-black text-2xl leading-tight mb-4">-->
-<!--Optimizing for Zero-JS Interactions-->
-<!--</h3>-->
-<!--<p class="font-body text-sm mb-6 flex-grow">-->
-<!--深入探讨本系统中使用的纯CSS组件，以及为什么性能始于减法。-->
-<!--</p>-->
-<!--<div class="mt-auto pt-4 border-t-2 border-black/10">-->
-<!--<a class="inline-flex items-center gap-2 font-mono font-bold uppercase tracking-widest text-xs group/link" href="#">-->
-<!--阅读技术文章-->
-<!--<span class="material-symbols-outlined text-sm group-hover/link:translate-x-1 transition-transform">arrow_forward</span>-->
-<!--</a>-->
-<!--</div>-->
-<!--</article>-->
-<!--<article class="bg-white border-4 border-black p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-all flex flex-col h-full">-->
-<!--<div class="mb-4 flex items-center justify-between">-->
-<!--<span class="font-mono text-xs font-bold bg-tertiary text-white px-2 py-1 uppercase tracking-widest">PROJECT</span>-->
-<!--<span class="font-mono text-[10px] uppercase font-bold tracking-widest text-on-surface-variant">SEPT 15, 2024</span>-->
-<!--</div>-->
-<!--<h3 class="font-headline font-black text-2xl leading-tight mb-4">-->
-<!--Mono-Scale Layout System-->
-<!--</h3>-->
-<!--<p class="font-body text-sm mb-6 flex-grow">-->
-<!--构建仅使用两种尺寸的排版比例：显示和标签。一种基于约束的布局设计方法。-->
-<!--</p>-->
-<!--<div class="mt-auto pt-4 border-t-2 border-black/10">-->
-<!--<a class="inline-flex items-center gap-2 font-mono font-bold uppercase tracking-widest text-xs group/link" href="#">-->
-<!--查看项目-->
-<!--<span class="material-symbols-outlined text-sm group-hover/link:translate-x-1 transition-transform">arrow_forward</span>-->
-<!--</a>-->
-<!--</div>-->
-<!--</article>-->
-<!--<article class="bg-primary-container border-4 border-black p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-all flex flex-col h-full">-->
-<!--<div class="mb-4 flex items-center justify-between">-->
-<!--<span class="font-mono text-xs font-bold bg-black text-primary-fixed px-2 py-1 uppercase tracking-widest">ESSAY</span>-->
-<!--<span class="font-mono text-[10px] uppercase font-bold tracking-widest text-black/60">SEPT 02, 2024</span>-->
-<!--</div>-->
-<!--<h3 class="font-headline font-black text-2xl leading-tight mb-4">-->
-<!--Why Your Brand Sucks at Boldness-->
-<!--</h3>-->
-<!--<p class="font-body text-sm mb-6 flex-grow text-black/80">-->
-<!--对"安全科技"美学和现代数字产品中视觉个性消亡的批判。-->
-<!--</p>-->
-<!--<div class="mt-auto pt-4 border-t-2 border-black/20">-->
-<!--<a class="inline-flex items-center gap-2 font-mono font-bold uppercase tracking-widest text-xs group/link text-black" href="#">-->
-<!--阅读完整文章-->
-<!--<span class="material-symbols-outlined text-sm group-hover/link:translate-x-1 transition-transform">arrow_forward</span>-->
-<!--</a>-->
-<!--</div>-->
-<!--</article>-->
-<!--<article class="bg-white border-4 border-black p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-all flex flex-col h-full">-->
-<!--<div class="mb-4 flex items-center justify-between">-->
-<!--<span class="font-mono text-xs font-bold bg-on-background text-white px-2 py-1 uppercase tracking-widest">TECH</span>-->
-<!--<span class="font-mono text-[10px] uppercase font-bold tracking-widest text-on-surface-variant">AUG 28, 2024</span>-->
-<!--</div>-->
-<!--<h3 class="font-headline font-black text-2xl leading-tight mb-4">-->
-<!--The Variable Font Revolution-->
-<!--</h3>-->
-<!--<p class="font-body text-sm mb-6 flex-grow">-->
-<!--一个文件如何替代二十个文件，以及为什么排版最终变得像它所在的网络一样流畅。-->
-<!--</p>-->
-<!--<div class="mt-auto pt-4 border-t-2 border-black/10">-->
-<!--<a class="inline-flex items-center gap-2 font-mono font-bold uppercase tracking-widest text-xs group/link" href="#">-->
-<!--阅读论文-->
-<!--<span class="material-symbols-outlined text-sm group-hover/link:translate-x-1 transition-transform">arrow_forward</span>-->
-<!--</a>-->
-<!--</div>-->
-<!--</article>-->
+<div id="article-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
 </div>
+<div id="loading" class="text-center py-12 font-mono text-on-surface-variant hidden">加载中...</div>
+<div id="empty-state" class="text-center py-12 font-mono text-on-surface-variant hidden">暂无文章</div>
 <div class="mt-20 flex justify-center items-center gap-4">
-<button class="w-12 h-12 border-2 border-black flex items-center justify-center bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all">
+<button id="btn-prev" class="w-12 h-12 border-2 border-black flex items-center justify-center bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all disabled:opacity-40 disabled:cursor-not-allowed" disabled>
 <span class="material-symbols-outlined">chevron_left</span>
 </button>
-<span class="font-mono font-bold text-sm tracking-widest">PAGE 01 / 12</span>
-<button class="w-12 h-12 border-2 border-black flex items-center justify-center bg-black text-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all">
+<span id="page-info" class="font-mono font-bold text-sm tracking-widest">PAGE 01 / 01</span>
+<button id="btn-next" class="w-12 h-12 border-2 border-black flex items-center justify-center bg-black text-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all disabled:opacity-40 disabled:cursor-not-allowed" disabled>
 <span class="material-symbols-outlined">chevron_right</span>
 </button>
 </div>
@@ -276,7 +167,7 @@ The Index<span class="text-tertiary">.</span>
 <div class="w-full px-6 py-12 flex flex-col md:flex-row justify-between items-center gap-4 max-w-7xl mx-auto">
 <a href="index.html" class="text-lg font-black text-[#FFE600] font-headline uppercase hover:opacity-80">THE ENGINEER</a>
 <div class="font-mono text-xs uppercase tracking-widest text-zinc-500 text-center">
-© 2024 THE ENGINEER. BUILT WITH RAW INTENT.
+© 2026 THE ENGINEER. BUILT WITH RAW INTENT.
 </div>
 <nav class="flex gap-6 font-mono text-xs uppercase tracking-widest">
 <a class="text-zinc-500 hover:text-[#FFE600] underline decoration-1 underline-offset-4 opacity-80 hover:opacity-100 transition-all" href="#">隐私</a>
@@ -308,4 +199,5 @@ The Index<span class="text-tertiary">.</span>
 <script src="../js/track.js"></script>
 <script src="../js/main.js"></script>
 <script src="../js/nav.js"></script>
+<script src="../js/article.js"></script>
 </body></html>

@@ -48,7 +48,8 @@ public class SaTokenConfigure implements WebMvcConfigurer {
                         "/static/**",
                         "/image/**",
                         "/advert/**",
-                        "/track/**"
+                        "/track/**",
+                        "/article/**"
                 );
     }
 }

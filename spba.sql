@@ -201,3 +201,16 @@ CREATE TABLE `track_event` (
   KEY `idx_category` (`category`),
   KEY `idx_trigger_time` (`trigger_time`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC COMMENT='前端埋点事件表';
+
+DROP TABLE IF EXISTS `article`;
+CREATE TABLE IF NOT EXISTS `article` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) NOT NULL,
+  `subtitle` varchar(512) DEFAULT NULL,
+  `content` longtext,
+  `category` varchar(50) DEFAULT NULL,
+  `author` varchar(100) DEFAULT NULL,
+  `createTime` datetime DEFAULT CURRENT_TIMESTAMP,
+  `updateTime` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
