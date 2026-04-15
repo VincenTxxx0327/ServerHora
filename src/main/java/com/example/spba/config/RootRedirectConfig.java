@@ -42,7 +42,6 @@ public class RootRedirectConfig implements WebServerFactoryCustomizer<TomcatServ
         public void invoke(Request request, Response response) throws IOException, ServletException {
             String uri = request.getRequestURI();
             if ("/".equals(uri)) {
-                System.out.println("=======>>invokeLocation");
                 response.setStatus(HttpServletResponse.SC_FOUND);
                 response.setHeader("Location", "/spba-api/home/index.html");
                 response.finishResponse();
