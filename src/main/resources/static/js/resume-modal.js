@@ -5,6 +5,7 @@
     var currentSource = '';
 
     var channelOptions = [
+        { value: '', label: '--请选择--' },
         { value: 'BOSS直聘', label: 'BOSS直聘' },
         { value: '拉钩', label: '拉钩' },
         { value: '智联招聘', label: '智联招聘' },
@@ -75,7 +76,14 @@
         document.getElementById('resume-modal-backdrop').addEventListener('click', close);
         document.getElementById('resume-modal-close').addEventListener('click', close);
         document.getElementById('resume-modal-cancel').addEventListener('click', close);
-        document.getElementById('resume-modal-confirm').addEventListener('click', handleConfirm);
+        document.getElementById('resume-modal-confirm').addEventListener('click', function() {
+             var selectEl = document.getElementById('resume-channel-select');
+             if (selectEl.value === '') {
+                return
+             } else {
+                handleConfirm();
+             }
+        });
 
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape' && getModal() && getModal().style.display !== 'none') {
@@ -94,7 +102,7 @@
         var otherWrapper = document.getElementById('resume-other-wrapper');
         var otherInput = document.getElementById('resume-other-input');
 
-        selectEl.value = 'BOSS直聘';
+        selectEl.value = '';
         otherWrapper.style.display = 'none';
         otherInput.value = '';
 
