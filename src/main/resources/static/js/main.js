@@ -148,10 +148,14 @@ function initTrackEvents() {
             }
         });
     });
-
-    document.querySelectorAll('.site-nav__cta, button.cta, .cta-button').forEach(function(btn) {
-        btn.addEventListener('click', function() {
-            TrackSDK.trackAction('cta', this.textContent.trim());
+    document.querySelectorAll('.btn-get-resume').forEach(function(link) {
+        link.addEventListener('click', function() {
+            if (typeof TrackSDK !== 'undefined') {
+                TrackSDK.trackClick('resume-click', '获取简历', this.id || '');
+            }
+            if (typeof ResumeModal !== 'undefined') {
+                ResumeModal.open('resume-click');
+            }
         });
     });
 }

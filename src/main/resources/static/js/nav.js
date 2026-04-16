@@ -81,7 +81,12 @@
 
         document.querySelectorAll('.site-nav__cta').forEach(function(btn) {
             btn.addEventListener('click', function() {
-                TrackSDK.trackAction('nav-click', 'CTA: ' + this.textContent.trim());
+                if (typeof TrackSDK !== 'undefined') {
+                    TrackSDK.trackClick('contact-click', '联系我', this.id || '');
+                }
+                if (typeof ResumeModal !== 'undefined') {
+                    ResumeModal.open('contact-click');
+                }
             });
         });
     }
