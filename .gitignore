@@ -2,4 +2,4 @@
 out
 target
 # 忽略本地简历
-/resume.zip
+src/main/resources/static/files/resume.zip
