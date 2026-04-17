@@ -16,4 +16,6 @@ public interface MemberMapper extends BaseMapper<Member> {
     public HashMap getInfo(HashMap params);
 
     public List<HashMap> getRoleAdminAll(Integer roleId);
+
+    public void updateLogin(HashMap params);
 }

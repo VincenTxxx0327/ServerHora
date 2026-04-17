@@ -32,7 +32,7 @@ public class MemberInfoServiceImpl extends ServiceImpl<MemberInfoMapper, MemberI
     @Override
     public Boolean checkUsername(@NotBlank String username) {
         HashMap<String, Object> where = new HashMap<>();
-        where.put("login_code", username);
+        where.put("username", username);
         return getInfo(where) != null;
     }
 }

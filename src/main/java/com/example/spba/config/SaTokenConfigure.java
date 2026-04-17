@@ -44,12 +44,13 @@ public class SaTokenConfigure implements WebMvcConfigurer {
                 .excludePathPatterns(
                         "/login",
                         "/register",
-                        "/home/**",
                         "/static/**",
                         "/image/**",
                         "/advert/**",
                         "/track/**",
-                        "/article/**"
+                        "/article/**",
+                        "/home/**",
+                        "/backend/**"
                 );
     }
 }

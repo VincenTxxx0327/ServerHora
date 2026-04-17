@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>SPBA - 管理后台</title>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap"
+          rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+          rel="stylesheet"/>
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css"/>
+    <link rel="stylesheet" href="css/backend.css"/>
+    <script>
+        var _SECRET_KEY = 'SPBA_XOR_K3Y_2024';
+        function xorDecrypt(encoded, key) {
+          try { var str = decodeURIComponent(escape(atob(encoded))); var result = ''; for (var i = 0; i < str.length; i++) { result += String.fromCharCode(str.charCodeAt(i) ^ key.charCodeAt(i % key.length)); } return result; } catch (e) { return null; }
+        }
+        function getSecureToken() {
+          var encrypted = localStorage.getItem('_spba_tk');
+          if (!encrypted) return null;
+          var loginTime = parseInt(localStorage.getItem('_spba_lt') || '0');
+          if (Date.now() - loginTime > 6 * 60 * 60 * 1000) { localStorage.removeItem('_spba_tk'); localStorage.removeItem('_spba_lt'); localStorage.removeItem('_spba_user'); document.cookie = '_spba_auth=; path=/spba-api; expires=Thu, 01 Jan 1970 00:00:00 GMT'; return null; }
+          return xorDecrypt(encrypted, _SECRET_KEY);
+        }
+        if (!getSecureToken()) { window.location.href = '/spba-api/backend/login.html'; }
+    </script>
+</head>
+<body>
+<div id="app">
+    <header class="admin-header">
+        <div style="display:flex;align-items:center;gap:32px;">
+            <a class="logo-area" @click="goWelcome">
+                <div class="logo-icon">
+                    <span class="material-symbols-outlined" style="color:white;font-size:20px;">account_balance</span>
+                </div>
+                <span class="logo-text">SPBA Admin</span>
+            </a>
+            <nav class="nav-tabs">
+                <a class="nav-tab" :class="{active: activeTopNav==='profile'}"
+                   @click="switchTopNav('profile')">个人中心</a>
+                <a class="nav-tab" :class="{active: activeTopNav==='publish'}"
+                   @click="switchTopNav('publish')">发布管理</a>
+            </nav>
+        </div>
+        <div class="user-area">
+            <span class="nickname">{{userInfo.nick_name || userInfo.username || '用户'}}</span>
+            <div class="avatar-placeholder" v-if="!userInfo.avatar" @click="$router.push('/profile')">
+                {{(userInfo.nick_name || userInfo.username || 'U').charAt(0).toUpperCase()}}
+            </div>
+            <img class="avatar" v-else :src="userInfo.avatar" @click="$router.push('/profile')"/>
+            <el-button type="text" size="small" @click="handleLogout" style="color:var(--secondary);font-weight:500;">
+                <span class="material-symbols-outlined" style="font-size:18px;margin-right:4px;">logout</span>退出
+            </el-button>
+        </div>
+    </header>
+
+    <aside class="admin-aside">
+        <div class="aside-header">
+            <h3>{{activeTopNav==='profile'?'个人中心':'发布管理'}}</h3>
+            <p>{{activeTopNav==='profile'?'管理您的个人信息':'管理您的内容与资产'}}</p>
+        </div>
+        <template v-if="activeTopNav==='profile'">
+            <a class="menu-item" :class="{active:$route.path==='/profile'}" @click="$router.push('/profile')">
+                <span class="material-symbols-outlined">person</span>基本信息
+            </a>
+            <a class="menu-item" :class="{active:$route.path==='/messages'}" @click="$router.push('/messages')">
+                <span class="material-symbols-outlined">mail</span>消息管理
+            </a>
+        </template>
+        <template v-if="activeTopNav==='publish'">
+            <a class="menu-item" :class="{active:$route.path==='/articles'}" @click="$router.push('/articles')">
+                <span class="material-symbols-outlined">article</span>文章管理
+            </a>
+            <a class="menu-item" :class="{active:$route.path==='/projects'}" @click="$router.push('/projects')">
+                <span class="material-symbols-outlined">inventory_2</span>项目管理
+            </a>
+        </template>
+        <div class="aside-footer">
+            <button class="logout-btn" @click="handleLogout">
+                <span class="material-symbols-outlined">logout</span>退出登录
+            </button>
+        </div>
+    </aside>
+
+    <main class="admin-main">
+        <router-view :key="$route.fullPath"></router-view>
+    </main>
+</div>
+
+<script src="https://unpkg.com/vue@2/dist/vue.min.js"></script>
+<script src="https://unpkg.com/vue-router@3/dist/vue-router.js"></script>
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script>
+    var _SECRET_KEY = 'SPBA_XOR_K3Y_2024';
+
+    function xorEncrypt(str, key) {
+      var result = '';
+      for (var i = 0; i < str.length; i++) {
+        result += String.fromCharCode(str.charCodeAt(i) ^ key.charCodeAt(i % key.length));
+      }
+      return btoa(unescape(encodeURIComponent(result)));
+    }
+
+    function xorDecrypt(encoded, key) {
+      try {
+        var str = decodeURIComponent(escape(atob(encoded)));
+        var result = '';
+        for (var i = 0; i < str.length; i++) {
+          result += String.fromCharCode(str.charCodeAt(i) ^ key.charCodeAt(i % key.length));
+        }
+        return result;
+      } catch (e) { return null; }
+    }
+
+    function getSecureToken() {
+      var encrypted = localStorage.getItem('_spba_tk');
+      if (!encrypted) return null;
+      var loginTime = parseInt(localStorage.getItem('_spba_lt') || '0');
+      var sixHours = 6 * 60 * 60 * 1000;
+      if (Date.now() - loginTime > sixHours) {
+        clearSecureToken();
+        return null;
+      }
+      return xorDecrypt(encrypted, _SECRET_KEY);
+    }
+
+    function clearSecureToken() {
+      localStorage.removeItem('_spba_tk');
+      localStorage.removeItem('_spba_lt');
+      localStorage.removeItem('_spba_user');
+      document.cookie = '_spba_auth=; path=/spba-api; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+    }
+
+    function apiRequest(method, url, data, callback) {
+      var token = getSecureToken();
+      var xhr = new XMLHttpRequest();
+      xhr.open(method, '/spba-api' + url, true);
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      if (token) {
+        xhr.setRequestHeader('satoken', token);
+      }
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4) {
+          try {
+            var res = JSON.parse(xhr.responseText);
+            if (res.code === 501) {
+              clearSecureToken();
+              window.location.href = '/spba-api/backend/login.html';
+              return;
+            }
+            callback(res);
+          } catch (e) {
+            callback({code: 500, message: '网络错误', data: {}});
+          }
+        }
+      };
+      xhr.send(data ? JSON.stringify(data) : null);
+    }
+
+    var WelcomePage = {
+      template: '\
+        <div>\
+          <div class="welcome-hero">\
+            <h1>欢迎，{{userName}}</h1>\
+            <p>今天是 {{todayStr}}。这是您最新的业务概览与内容动态。</p>\
+            <div class="quick-actions">\
+              <button class="action-btn primary" @click="$router.push(\'/article/edit\')">\
+                <span class="material-symbols-outlined" style="font-size:18px;">add_circle</span>新建文章\
+              </button>\
+              <button class="action-btn ghost" @click="$router.push(\'/messages\')">\
+                <span class="material-symbols-outlined" style="font-size:18px;">mail</span>查看消息\
+              </button>\
+            </div>\
+          </div>\
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-bottom:32px;">\
+            <div class="stat-card">\
+              <div class="stat-icon" style="background:rgba(0,96,169,0.1);color:var(--primary);">\
+                <span class="material-symbols-outlined">article</span>\
+              </div>\
+              <div class="stat-label">文章总数</div>\
+              <div class="stat-value">{{stats.articles}}</div>\
+            </div>\
+            <div class="stat-card">\
+              <div class="stat-icon" style="background:rgba(40,108,0,0.1);color:var(--tertiary);">\
+                <span class="material-symbols-outlined">visibility</span>\
+              </div>\
+              <div class="stat-label">页面浏览量</div>\
+              <div class="stat-value">{{stats.views}}</div>\
+            </div>\
+            <div class="stat-card">\
+              <div class="stat-icon" style="background:rgba(85,175,40,0.1);color:var(--tertiary-container);">\
+                <span class="material-symbols-outlined">inventory_2</span>\
+              </div>\
+              <div class="stat-label">项目总数</div>\
+              <div class="stat-value">{{stats.projects}}</div>\
+            </div>\
+            <div class="stat-card">\
+              <div class="stat-icon" style="background:var(--secondary-container);color:var(--secondary);">\
+                <span class="material-symbols-outlined">notifications</span>\
+              </div>\
+              <div class="stat-label">未读消息</div>\
+              <div class="stat-value">{{stats.messages}}</div>\
+            </div>\
+          </div>\
+          <div style="display:grid;grid-template-columns:2fr 1fr;gap:24px;">\
+            <div class="card">\
+              <h3 style="font-size:18px;font-weight:700;margin-bottom:20px;">快速操作</h3>\
+              <div style="display:flex;gap:12px;flex-wrap:wrap;">\
+                <el-button type="primary" icon="el-icon-edit" @click="$router.push(\'/article/edit\')">撰写文章</el-button>\
+                <el-button icon="el-icon-folder-add" @click="$router.push(\'/project/edit\')">新建项目</el-button>\
+                <el-button icon="el-icon-user" @click="$router.push(\'/profile\')">编辑资料</el-button>\
+              </div>\
+            </div>\
+            <div class="card">\
+              <h3 style="font-size:18px;font-weight:700;margin-bottom:20px;">最近消息</h3>\
+              <div class="msg-item">\
+                <div class="msg-icon" style="background:rgba(0,96,169,0.1);color:var(--primary);">\
+                  <span class="material-symbols-outlined" style="font-size:20px;">mail</span>\
+                </div>\
+                <div>\
+                  <div class="msg-title">系统通知</div>\
+                  <div class="msg-desc">欢迎使用 SPBA 管理后台</div>\
+                  <div class="msg-time">刚刚</div>\
+                </div>\
+              </div>\
+            </div>\
+          </div>\
+        </div>',
+      data: function() {
+        return {
+          stats: { articles: 0, views: 0, projects: 0, messages: 3 },
+          userName: '管理员'
+        };
+      },
+      computed: {
+        todayStr: function() {
+          var d = new Date();
+          return d.getFullYear() + '年' + (d.getMonth()+1) + '月' + d.getDate() + '日';
+        }
+      },
+      created: function() {
+        var user = JSON.parse(localStorage.getItem('_spba_user') || '{}');
+        this.userName = user.nick_name || user.username || '管理员';
+        var self = this;
+        apiRequest('GET', '/article/list?page=1&size=1', null, function(res) {
+          if (res.code === 200 && res.data && res.data.total !== undefined) {
+            self.stats.articles = res.data.total;
+          }
+        });
+      }
+    };
+
+    var ProfilePage = {
+      template: '\
+        <div>\
+          <div class="page-header">\
+            <h1>基本信息设置</h1>\
+            <p>管理您的个人资料、联系方式及账户状态</p>\
+          </div>\
+          <div class="card" style="margin-bottom:24px;">\
+            <div class="profile-section">\
+              <div class="profile-avatar-area">\
+                <div class="profile-avatar">\
+                  <img v-if="form.avatar" :src="form.avatar"/>\
+                  <div v-else style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:var(--primary-fixed);color:var(--primary);font-size:48px;font-weight:800;font-family:Manrope;">\
+                    {{(form.nick_name||form.username||"U").charAt(0).toUpperCase()}}\
+                  </div>\
+                </div>\
+                <button class="profile-avatar-edit" @click="triggerAvatarUpload">\
+                  <span class="material-symbols-outlined" style="font-size:16px;">edit</span>\
+                </button>\
+                <input type="file" ref="avatarInput" style="display:none" accept="image/*" @change="handleAvatarChange"/>\
+              </div>\
+              <div style="flex:1;">\
+                <el-form :model="form" label-width="100px" label-position="top">\
+                  <el-form-item label="昵称">\
+                    <el-input v-model="form.nick_name" placeholder="请输入昵称"></el-input>\
+                  </el-form-item>\
+                  <el-form-item label="用户名">\
+                    <el-input v-model="form.username" disabled></el-input>\
+                  </el-form-item>\
+                  <el-form-item>\
+                    <el-button type="primary" @click="saveProfile" :loading="saving">保存更改</el-button>\
+                  </el-form-item>\
+                </el-form>\
+              </div>\
+            </div>\
+          </div>\
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">\
+            <div class="card-sm">\
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">\
+                <span class="material-symbols-outlined" style="color:var(--primary);font-size:20px;">update</span>\
+                <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--on-surface-variant);">最后更新</span>\
+              </div>\
+              <p style="font-size:14px;font-weight:500;">刚刚</p>\
+            </div>\
+            <div class="card-sm">\
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">\
+                <span class="material-symbols-outlined" style="color:var(--tertiary);font-size:20px;">verified_user</span>\
+                <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--on-surface-variant);">安全等级</span>\
+              </div>\
+              <p style="font-size:14px;font-weight:500;color:var(--tertiary);">高</p>\
+            </div>\
+            <div class="card-sm">\
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">\
+                <span class="material-symbols-outlined" style="color:var(--secondary);font-size:20px;">badge</span>\
+                <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--on-surface-variant);">认证状态</span>\
+              </div>\
+              <p style="font-size:14px;font-weight:500;">已认证</p>\
+            </div>\
+          </div>\
+        </div>',
+      data: function() {
+        return {
+          form: { nick_name: '', username: '', avatar: '' },
+          saving: false
+        };
+      },
+      created: function() {
+        var user = JSON.parse(localStorage.getItem('_spba_user') || '{}');
+        this.form.nick_name = user.nick_name || '';
+        this.form.username = user.username || '';
+        this.form.avatar = user.avatar || '';
+      },
+      methods: {
+        triggerAvatarUpload: function() {
+          this.$refs.avatarInput.click();
+        },
+        handleAvatarChange: function(e) {
+          var file = e.target.files[0];
+          if (!file) return;
+          var fd = new FormData();
+          fd.append('file', file);
+          fd.append('type', 'avatar');
+          var token = getSecureToken();
+          var xhr = new XMLHttpRequest();
+          xhr.open('POST', '/spba-api/image/upload', true);
+          if (token) xhr.setRequestHeader('satoken', token);
+          var self = this;
+          xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4) {
+              try {
+                var res = JSON.parse(xhr.responseText);
+                if (res.code === 200 && res.data && res.data.path) {
+                  self.form.avatar = res.data.path;
+                  self.$message.success('头像上传成功');
+                } else {
+                  self.$message.error(res.message || '上传失败');
+                }
+              } catch(e) { self.$message.error('上传失败'); }
+            }
+          };
+          xhr.send(fd);
+        },
+        saveProfile: function() {
+          this.saving = true;
+          var user = JSON.parse(localStorage.getItem('_spba_user') || '{}');
+          user.nick_name = this.form.nick_name;
+          user.avatar = this.form.avatar;
+          localStorage.setItem('_spba_user', JSON.stringify(user));
+          var self = this;
+          setTimeout(function() {
+            self.saving = false;
+            self.$message.success('保存成功');
+          }, 500);
+        }
+      }
+    };
+
+    var MessagesPage = {
+      template: '\
+        <div>\
+          <div class="page-header">\
+            <h1>消息管理</h1>\
+            <p>集中处理系统通知、任务提醒及各模块协作消息</p>\
+          </div>\
+          <div class="card" style="text-align:center;padding:64px 32px;">\
+            <div style="width:200px;height:200px;margin:0 auto 24px;background:rgba(0,96,169,0.05);border-radius:50%;display:flex;align-items:center;justify-content:center;">\
+              <span class="material-symbols-outlined" style="font-size:80px;color:var(--outline-variant);">mail</span>\
+            </div>\
+            <h2 style="font-size:24px;font-weight:700;margin-bottom:12px;">暂无新消息</h2>\
+            <p style="color:var(--on-surface-variant);max-width:400px;margin:0 auto 24px;">您目前的收件箱非常整洁。当有新的系统动态、审批流程或站内通知时，我们将第一时间在此通知您。</p>\
+            <el-button type="primary" @click="$router.push(\'/profile\')">返回个人中心</el-button>\
+          </div>\
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:32px;">\
+            <div class="card-sm" style="text-align:center;">\
+              <span class="material-symbols-outlined" style="font-size:36px;color:var(--primary);margin-bottom:12px;">verified_user</span>\
+              <h3 style="font-size:16px;font-weight:700;margin-bottom:8px;">消息安全</h3>\
+              <p style="font-size:13px;color:var(--on-surface-variant);line-height:1.6;">采用端到端加密技术，确保每一份通知与私信的传输安全。</p>\
+            </div>\
+            <div class="card-sm" style="text-align:center;">\
+              <span class="material-symbols-outlined" style="font-size:36px;color:var(--tertiary);margin-bottom:12px;">auto_awesome</span>\
+              <h3 style="font-size:16px;font-weight:700;margin-bottom:8px;">智能分类</h3>\
+              <p style="font-size:13px;color:var(--on-surface-variant);line-height:1.6;">利用AI自动识别消息权重，区分系统预警与日常通知。</p>\
+            </div>\
+            <div class="card-sm" style="text-align:center;">\
+              <span class="material-symbols-outlined" style="font-size:36px;color:var(--error);margin-bottom:12px;">bolt</span>\
+              <h3 style="font-size:16px;font-weight:700;margin-bottom:8px;">实时推送</h3>\
+              <p style="font-size:13px;color:var(--on-surface-variant);line-height:1.6;">毫秒级延迟的即时反馈系统，确保重要决策得到即时响应。</p>\
+            </div>\
+          </div>\
+        </div>'
+    };
+
+    var ArticlesPage = {
+      template: '\
+        <div>\
+          <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:32px;">\
+            <div class="page-header" style="margin-bottom:0;">\
+              <h1>文章管理</h1>\
+              <p>查看、编辑并管理您的所有文章内容</p>\
+            </div>\
+            <el-button type="primary" @click="$router.push(\'/article/edit\')">\
+              <span class="material-symbols-outlined" style="font-size:18px;margin-right:4px;">add</span>新建文章\
+            </el-button>\
+          </div>\
+          <div class="card" style="margin-bottom:24px;padding:16px 20px;display:flex;align-items:center;gap:16px;">\
+            <el-input v-model="searchKey" placeholder="搜索文章标题、关键字..." prefix-icon="el-icon-search" style="max-width:360px;" clearable @clear="loadArticles" @keyup.enter.native="loadArticles"></el-input>\
+            <el-select v-model="statusFilter" placeholder="全部状态" clearable @change="loadArticles" style="width:140px;">\
+              <el-option label="全部文章" value=""></el-option>\
+              <el-option label="已发布" value="published"></el-option>\
+              <el-option label="草稿" value="draft"></el-option>\
+            </el-select>\
+          </div>\
+          <div class="card" style="padding:0;">\
+            <el-table :data="articles" style="width:100%;" row-key="id" id="articleTable">\
+              <el-table-column width="50" align="center">\
+                <template slot="header"><span></span></template>\
+                <template slot-scope="scope">\
+                  <span class="drag-handle material-symbols-outlined">drag_indicator</span>\
+                </template>\
+              </el-table-column>\
+              <el-table-column label="文章标题" min-width="300">\
+                <template slot-scope="scope">\
+                  <div style="display:flex;align-items:center;gap:12px;">\
+                    <div style="font-weight:700;font-size:14px;">{{scope.row.title}}</div>\
+                  </div>\
+                  <div style="font-size:12px;color:var(--outline);margin-top:4px;">{{scope.row.category || \'未分类\'}}</div>\
+                </template>\
+              </el-table-column>\
+              <el-table-column label="状态" width="100" align="center">\
+                <template slot-scope="scope">\
+                  <span class="status-tag" :class="scope.row.status||\'draft\'">{{statusMap[scope.row.status]||\'草稿\'}}</span>\
+                </template>\
+              </el-table-column>\
+              <el-table-column label="发布日期" width="140" align="center">\
+                <template slot-scope="scope">\
+                  <span style="font-size:13px;color:var(--on-surface-variant);">{{formatDate(scope.row.createTime)}}</span>\
+                </template>\
+              </el-table-column>\
+              <el-table-column label="操作" width="160" align="right">\
+                <template slot-scope="scope">\
+                  <el-button type="text" size="small" @click="$router.push(\'/article/edit/\'+scope.row.id)">\
+                    <span class="material-symbols-outlined" style="font-size:18px;">edit</span>\
+                  </el-button>\
+                  <el-button type="text" size="small" style="color:var(--error);" @click="deleteArticle(scope.row)">\
+                    <span class="material-symbols-outlined" style="font-size:18px;">delete</span>\
+                  </el-button>\
+                </template>\
+              </el-table-column>\
+            </el-table>\
+            <div style="padding:20px;display:flex;justify-content:space-between;align-items:center;">\
+              <span style="font-size:12px;color:var(--outline-variant);">共 {{total}} 篇文章</span>\
+              <el-pagination layout="prev, pager, next" :total="total" :page-size="pageSize" :current-page.sync="currentPage" @current-change="loadArticles"></el-pagination>\
+            </div>\
+          </div>\
+        </div>',
+      data: function() {
+        return {
+          articles: [],
+          searchKey: '',
+          statusFilter: '',
+          currentPage: 1,
+          pageSize: 10,
+          total: 0,
+          statusMap: { published: '已发布', draft: '草稿', offline: '已下线' },
+          sortable: null
+        };
+      },
+      mounted: function() {
+        this.loadArticles();
+      },
+      methods: {
+        loadArticles: function() {
+          var self = this;
+          var url = '/article/list?page=' + this.currentPage + '&size=' + this.pageSize;
+          if (this.searchKey) url += '&keyword=' + encodeURIComponent(this.searchKey);
+          apiRequest('GET', url, null, function(res) {
+            if (res.code === 200 && res.data) {
+              var records = res.data.records || [];
+              self.articles = records.map(function(a) {
+                a.status = a.status || 'draft';
+                return a;
+              });
+              self.total = res.data.total || 0;
+              self.$nextTick(function() { self.initSortable(); });
+            }
+          });
+        },
+        initSortable: function() {
+          var el = document.querySelector('#articleTable .el-table__body-wrapper tbody');
+          if (!el) return;
+          if (this.sortable) this.sortable.destroy();
+          var self = this;
+          this.sortable = Sortable.create(el, {
+            handle: '.drag-handle',
+            animation: 150,
+            ghostClass: 'sortable-ghost',
+            chosenClass: 'sortable-chosen',
+            onEnd: function(evt) {
+              var item = self.articles.splice(evt.oldIndex, 1)[0];
+              self.articles.splice(evt.newIndex, 0, item);
+              self.$message.success('排序已更新');
+            }
+          });
+        },
+        deleteArticle: function(row) {
+          var self = this;
+          this.$confirm('确定删除文章「' + row.title + '」？', '删除确认', {
+            confirmButtonText: '确定删除',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(function() {
+            self.articles = self.articles.filter(function(a) { return a.id !== row.id; });
+            self.total--;
+            self.$message.success('删除成功');
+          }).catch(function() {});
+        },
+        formatDate: function(d) {
+          if (!d) return '--';
+          var date = new Date(d);
+          return date.getFullYear() + '-' + String(date.getMonth()+1).padStart(2,'0') + '-' + String(date.getDate()).padStart(2,'0');
+        }
+      }
+    };
+
+    var ArticleEditPage = {
+      template: '\
+        <div>\
+          <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:32px;">\
+            <div class="page-header" style="margin-bottom:0;">\
+              <h1>{{isEdit?\'编辑文章\':\'撰写新文章\'}}</h1>\
+              <p>{{isEdit?\'修改文章内容并重新发布\':\'编辑您的思想并将其分享给世界\'}}</p>\
+            </div>\
+            <div style="display:flex;gap:12px;">\
+              <el-button @click="saveDraft" :loading="saving">保存草稿</el-button>\
+              <el-button type="primary" @click="publishArticle" :loading="publishing">发布文章</el-button>\
+            </div>\
+          </div>\
+          <div style="display:grid;grid-template-columns:2fr 1fr;gap:24px;">\
+            <div>\
+              <div class="card" style="margin-bottom:20px;">\
+                <el-input v-model="form.title" placeholder="在此输入文章标题..." style="font-size:20px;font-weight:700;" size="medium"></el-input>\
+              </div>\
+              <div class="markdown-editor">\
+                <div class="editor-toolbar">\
+                  <button @click="insertMd(\'**\',\'**\')" title="粗体"><span class="material-symbols-outlined" style="font-size:18px;">format_bold</span></button>\
+                  <button @click="insertMd(\'*\',\'*\')" title="斜体"><span class="material-symbols-outlined" style="font-size:18px;">format_italic</span></button>\
+                  <button @click="insertMd(\'[\',\'](url)\')" title="链接"><span class="material-symbols-outlined" style="font-size:18px;">link</span></button>\
+                  <button @click="insertMd(\'\\n> \',\'\')" title="引用"><span class="material-symbols-outlined" style="font-size:18px;">format_quote</span></button>\
+                  <button @click="insertMd(\'`\',\'`\')" title="代码"><span class="material-symbols-outlined" style="font-size:18px;">code</span></button>\
+                  <button @click="insertMd(\'![alt](\',\')\')" title="图片"><span class="material-symbols-outlined" style="font-size:18px;">image</span></button>\
+                  <div class="separator"></div>\
+                  <button @click="insertMd(\'\\n- \',\'\')" title="无序列表"><span class="material-symbols-outlined" style="font-size:18px;">format_list_bulleted</span></button>\
+                  <button @click="insertMd(\'\\n1. \',\'\')" title="有序列表"><span class="material-symbols-outlined" style="font-size:18px;">format_list_numbered</span></button>\
+                  <div class="separator"></div>\
+                  <button @click="togglePreview" :style="{color:showPreview?\'var(--primary)\':\'\'}" title="预览"><span class="material-symbols-outlined" style="font-size:18px;">visibility</span></button>\
+                </div>\
+                <textarea v-show="!showPreview" v-model="form.content" ref="editor" placeholder="使用 Markdown 撰写您的精彩内容..."></textarea>\
+                <div v-show="showPreview" style="padding:20px;min-height:400px;line-height:1.8;font-size:15px;" v-html="previewHtml"></div>\
+              </div>\
+            </div>\
+            <div>\
+              <div class="card" style="margin-bottom:20px;">\
+                <h4 style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--on-surface-variant);margin-bottom:16px;">文章封面图</h4>\
+                <div class="cover-preview" v-if="form.cover">\
+                  <img :src="form.cover"/>\
+                  <div class="cover-overlay" @click="triggerCoverUpload">\
+                    <span><span class="material-symbols-outlined" style="font-size:18px;">cloud_upload</span>更换封面</span>\
+                  </div>\
+                </div>\
+                <div class="upload-area" v-else @click="triggerCoverUpload">\
+                  <div class="upload-icon"><span class="material-symbols-outlined">cloud_upload</span></div>\
+                  <div class="upload-text">点击或拖拽上传封面图</div>\
+                  <div class="upload-hint">建议尺寸: 1200 x 675 px</div>\
+                </div>\
+                <input type="file" ref="coverInput" style="display:none" accept="image/*" @change="handleCoverUpload"/>\
+              </div>\
+              <div class="card" style="margin-bottom:20px;">\
+                <h4 style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--on-surface-variant);margin-bottom:16px;">分类选择</h4>\
+                <el-select v-model="form.category" placeholder="选择分类" style="width:100%;">\
+                  <el-option label="设计趋势" value="设计趋势"></el-option>\
+                  <el-option label="前端技术" value="前端技术"></el-option>\
+                  <el-option label="架构设计" value="架构设计"></el-option>\
+                  <el-option label="产品规划" value="产品规划"></el-option>\
+                </el-select>\
+              </div>\
+              <div class="card">\
+                <h4 style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--on-surface-variant);margin-bottom:16px;">互动控制</h4>\
+                <div style="display:flex;flex-direction:column;gap:16px;">\
+                  <div style="display:flex;justify-content:space-between;align-items:center;">\
+                    <span style="font-size:14px;">允许评论</span>\
+                    <el-switch v-model="form.allowComment"></el-switch>\
+                  </div>\
+                  <div style="display:flex;justify-content:space-between;align-items:center;">\
+                    <span style="font-size:14px;">文章置顶</span>\
+                    <el-switch v-model="form.pinned"></el-switch>\
+                  </div>\
+                </div>\
+              </div>\
+            </div>\
+          </div>\
+        </div>',
+      data: function() {
+        return {
+          form: { title: '', content: '', category: '', cover: '', allowComment: true, pinned: false },
+          isEdit: false,
+          showPreview: false,
+          saving: false,
+          publishing: false
+        };
+      },
+      computed: {
+        previewHtml: function() {
+          if (!this.form.content) return '<p style="color:var(--outline);">暂无内容预览</p>';
+          return marked.parse(this.form.content);
+        }
+      },
+      created: function() {
+        var id = this.$route.params.id;
+        if (id) {
+          this.isEdit = true;
+          this.loadArticle(id);
+        }
+      },
+      methods: {
+        loadArticle: function(id) {
+          var self = this;
+          apiRequest('GET', '/article/' + id, null, function(res) {
+            if (res.code === 200 && res.data) {
+              self.form.title = res.data.title || '';
+              self.form.content = res.data.content || '';
+              self.form.category = res.data.category || '';
+              self.form.cover = res.data.cover || '';
+            }
+          });
+        },
+        insertMd: function(before, after) {
+          var ta = this.$refs.editor;
+          if (!ta) return;
+          var start = ta.selectionStart;
+          var end = ta.selectionEnd;
+          var selected = this.form.content.substring(start, end);
+          var replacement = before + selected + after;
+          this.form.content = this.form.content.substring(0, start) + replacement + this.form.content.substring(end);
+          ta.focus();
+          ta.setSelectionRange(start + before.length, start + before.length + selected.length);
+        },
+        togglePreview: function() {
+          this.showPreview = !this.showPreview;
+        },
+        triggerCoverUpload: function() {
+          this.$refs.coverInput.click();
+        },
+        handleCoverUpload: function(e) {
+          var file = e.target.files[0];
+          if (!file) return;
+          var fd = new FormData();
+          fd.append('file', file);
+          fd.append('type', 'public');
+          var token = getSecureToken();
+          var self = this;
+          var xhr = new XMLHttpRequest();
+          xhr.open('POST', '/spba-api/image/upload', true);
+          if (token) xhr.setRequestHeader('satoken', token);
+          xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4) {
+              try {
+                var res = JSON.parse(xhr.responseText);
+                if (res.code === 200 && res.data && res.data.path) {
+                  self.form.cover = res.data.path;
+                  self.$message.success('封面上传成功');
+                } else {
+                  self.$message.error(res.message || '上传失败');
+                }
+              } catch(e) { self.$message.error('上传失败'); }
+            }
+          };
+          xhr.send(fd);
+        },
+        saveDraft: function() {
+          this.saving = true;
+          var self = this;
+          setTimeout(function() {
+            self.saving = false;
+            self.$message.success('草稿已保存');
+          }, 500);
+        },
+        publishArticle: function() {
+          if (!this.form.title.trim()) {
+            this.$message.warning('请输入文章标题');
+            return;
+          }
+          this.publishing = true;
+          var self = this;
+          setTimeout(function() {
+            self.publishing = false;
+            self.$message.success('文章发布成功');
+            self.$router.push('/articles');
+          }, 800);
+        }
+      }
+    };
+
+    var ProjectsPage = {
+      template: '\
+        <div>\
+          <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:32px;">\
+            <div class="page-header" style="margin-bottom:0;">\
+              <h1>项目管理</h1>\
+              <p>查看、编辑并管理您的所有创意资产项目</p>\
+            </div>\
+            <el-button type="primary" @click="$router.push(\'/project/edit\')">\
+              <span class="material-symbols-outlined" style="font-size:18px;margin-right:4px;">add_circle</span>新建项目\
+            </el-button>\
+          </div>\
+          <div class="card" style="margin-bottom:24px;padding:16px 20px;display:flex;align-items:center;gap:16px;">\
+            <el-input v-model="searchKey" placeholder="搜索项目名称、关键词..." prefix-icon="el-icon-search" style="max-width:360px;" clearable></el-input>\
+          </div>\
+          <div class="card" style="padding:0;">\
+            <el-table :data="filteredProjects" style="width:100%;" row-key="id" id="projectTable">\
+              <el-table-column width="50" align="center">\
+                <template slot="header"><span></span></template>\
+                <template slot-scope="scope">\
+                  <span class="drag-handle material-symbols-outlined">drag_indicator</span>\
+                </template>\
+              </el-table-column>\
+              <el-table-column label="项目名称" min-width="250">\
+                <template slot-scope="scope">\
+                  <div style="display:flex;align-items:center;gap:12px;">\
+                    <div v-if="scope.row.cover" style="width:56px;height:56px;border-radius:10px;overflow:hidden;flex-shrink:0;">\
+                      <img :src="scope.row.cover" style="width:100%;height:100%;object-fit:cover;"/>\
+                    </div>\
+                    <div v-else style="width:56px;height:56px;border-radius:10px;background:var(--primary-fixed);display:flex;align-items:center;justify-content:center;flex-shrink:0;">\
+                      <span class="material-symbols-outlined" style="color:var(--primary);">inventory_2</span>\
+                    </div>\
+                    <div>\
+                      <div style="font-weight:700;font-size:14px;">{{scope.row.name}}</div>\
+                      <div style="font-size:12px;color:var(--outline);margin-top:4px;">{{scope.row.slogan||\'\'}}</div>\
+                    </div>\
+                  </div>\
+                </template>\
+              </el-table-column>\
+              <el-table-column label="状态" width="100" align="center">\
+                <template slot-scope="scope">\
+                  <span class="status-tag" :class="scope.row.status||\'active\'">{{projectStatusMap[scope.row.status]||\'进行中\'}}</span>\
+                </template>\
+              </el-table-column>\
+              <el-table-column label="最后修改" width="140" align="center">\
+                <template slot-scope="scope">\
+                  <span style="font-size:13px;color:var(--on-surface-variant);">{{scope.row.updateTime||\'--\'}}</span>\
+                </template>\
+              </el-table-column>\
+              <el-table-column label="操作" width="160" align="right">\
+                <template slot-scope="scope">\
+                  <el-button type="text" size="small" @click="$router.push(\'/project/edit/\'+scope.row.id)">\
+                    <span class="material-symbols-outlined" style="font-size:18px;">edit</span>\
+                  </el-button>\
+                  <el-button type="text" size="small" style="color:var(--error);" @click="deleteProject(scope.row)">\
+                    <span class="material-symbols-outlined" style="font-size:18px;">delete</span>\
+                  </el-button>\
+                </template>\
+              </el-table-column>\
+            </el-table>\
+          </div>\
+        </div>',
+      data: function() {
+        return {
+          projects: [
+            { id: 1, name: '元宇宙资产库重构', slogan: '全面优化3D模型渲染流程', cover: '', status: 'active', updateTime: '2024-01-15' },
+            { id: 2, name: '2024 品牌重塑指南', slogan: '定义全新的视觉识别系统', cover: '', status: 'archived', updateTime: '2024-01-10' },
+            { id: 3, name: '智能算力分配中心', slogan: '分布式算力节点管理控制台', cover: '', status: 'active', updateTime: '2024-01-05' }
+          ],
+          searchKey: '',
+          projectStatusMap: { active: '进行中', archived: '已归档', pending: '待审核' },
+          sortable: null
+        };
+      },
+      computed: {
+        filteredProjects: function() {
+          if (!this.searchKey) return this.projects;
+          var key = this.searchKey.toLowerCase();
+          return this.projects.filter(function(p) {
+            return p.name.toLowerCase().indexOf(key) > -1 || (p.slogan && p.slogan.toLowerCase().indexOf(key) > -1);
+          });
+        }
+      },
+      mounted: function() {
+        this.$nextTick(function() { this.initSortable(); });
+      },
+      methods: {
+        initSortable: function() {
+          var el = document.querySelector('#projectTable .el-table__body-wrapper tbody');
+          if (!el) return;
+          if (this.sortable) this.sortable.destroy();
+          var self = this;
+          this.sortable = Sortable.create(el, {
+            handle: '.drag-handle',
+            animation: 150,
+            ghostClass: 'sortable-ghost',
+            chosenClass: 'sortable-chosen',
+            onEnd: function(evt) {
+              var item = self.projects.splice(evt.oldIndex, 1)[0];
+              self.projects.splice(evt.newIndex, 0, item);
+              self.$message.success('排序已更新');
+            }
+          });
+        },
+        deleteProject: function(row) {
+          var self = this;
+          this.$confirm('确定删除项目「' + row.name + '」？', '删除确认', {
+            confirmButtonText: '确定删除',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(function() {
+            self.projects = self.projects.filter(function(p) { return p.id !== row.id; });
+            self.$message.success('删除成功');
+          }).catch(function() {});
+        }
+      }
+    };
+
+    var ProjectEditPage = {
+      template: '\
+        <div>\
+          <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:32px;">\
+            <div class="page-header" style="margin-bottom:0;">\
+              <h1>{{isEdit?\'编辑项目\':\'发布新项目\'}}</h1>\
+              <p>{{isEdit?\'修改项目信息并重新发布\':\'请详细填写项目信息，优秀的呈现能够获得更多关注\'}}</p>\
+            </div>\
+            <div style="display:flex;gap:12px;">\
+              <el-button @click="saveDraft" :loading="saving">保存草稿</el-button>\
+              <el-button type="primary" @click="publishProject" :loading="publishing">发布项目</el-button>\
+            </div>\
+          </div>\
+          <div style="display:grid;grid-template-columns:2fr 1fr;gap:24px;">\
+            <div>\
+              <div class="card" style="margin-bottom:20px;">\
+                <h4 style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--primary);margin-bottom:4px;">Project Identity</h4>\
+                <h3 style="font-size:20px;font-weight:700;margin-bottom:20px;">项目身份</h3>\
+                <el-form :model="form" label-position="top">\
+                  <el-form-item label="项目名称">\
+                    <el-input v-model="form.name" placeholder="输入引人入胜的项目标题..."></el-input>\
+                  </el-form-item>\
+                  <el-form-item label="核心口号 (Slogan)">\
+                    <el-input v-model="form.slogan" placeholder="一句话描述您的核心价值..."></el-input>\
+                  </el-form-item>\
+                </el-form>\
+              </div>\
+              <div class="card">\
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">\
+                  <div>\
+                    <h4 style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--primary);margin-bottom:4px;">Markdown Document</h4>\
+                    <h3 style="font-size:20px;font-weight:700;">详细说明</h3>\
+                  </div>\
+                  <div style="display:flex;gap:4px;">\
+                    <button @click="insertMd(\'**\',\'**\')" style="padding:6px;border:none;background:none;cursor:pointer;border-radius:6px;color:var(--on-surface-variant);" title="粗体"><span class="material-symbols-outlined" style="font-size:18px;">format_bold</span></button>\
+                    <button @click="insertMd(\'*\',\'*\')" style="padding:6px;border:none;background:none;cursor:pointer;border-radius:6px;color:var(--on-surface-variant);" title="斜体"><span class="material-symbols-outlined" style="font-size:18px;">format_italic</span></button>\
+                    <button @click="insertMd(\'[\',\'](url)\')" style="padding:6px;border:none;background:none;cursor:pointer;border-radius:6px;color:var(--on-surface-variant);" title="链接"><span class="material-symbols-outlined" style="font-size:18px;">link</span></button>\
+                    <button @click="insertMd(\'`\',\'`\')" style="padding:6px;border:none;background:none;cursor:pointer;border-radius:6px;color:var(--on-surface-variant);" title="代码"><span class="material-symbols-outlined" style="font-size:18px;">code</span></button>\
+                  </div>\
+                </div>\
+                <div class="markdown-editor" style="border:none;border-radius:12px;">\
+                  <textarea v-model="form.content" ref="editor" placeholder="使用 Markdown 编写您的项目故事..." style="min-height:360px;"></textarea>\
+                </div>\
+              </div>\
+            </div>\
+            <div>\
+              <div class="card" style="margin-bottom:20px;">\
+                <h4 style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--primary);margin-bottom:4px;">Cover Media</h4>\
+                <h3 style="font-size:18px;font-weight:700;margin-bottom:16px;">封面媒体上传</h3>\
+                <div class="cover-preview" v-if="form.cover">\
+                  <img :src="form.cover"/>\
+                  <div class="cover-overlay" @click="triggerCoverUpload">\
+                    <span><span class="material-symbols-outlined" style="font-size:18px;">cloud_upload</span>更换封面</span>\
+                  </div>\
+                </div>\
+                <div class="upload-area" v-else @click="triggerCoverUpload">\
+                  <div class="upload-icon"><span class="material-symbols-outlined">cloud_upload</span></div>\
+                  <div class="upload-text">点击或拖拽上传封面图</div>\
+                  <div class="upload-hint">推荐尺寸: 1600 x 900 px</div>\
+                </div>\
+                <input type="file" ref="coverInput" style="display:none" accept="image/*" @change="handleCoverUpload"/>\
+              </div>\
+              <div class="card" style="margin-bottom:20px;">\
+                <h4 style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--primary);margin-bottom:4px;">Classification</h4>\
+                <h3 style="font-size:18px;font-weight:700;margin-bottom:16px;">分类</h3>\
+                <el-select v-model="form.category" placeholder="选择分类" style="width:100%;margin-bottom:16px;">\
+                  <el-option label="软件开发" value="软件开发"></el-option>\
+                  <el-option label="视觉设计" value="视觉设计"></el-option>\
+                  <el-option label="市场营销" value="市场营销"></el-option>\
+                  <el-option label="商业计划" value="商业计划"></el-option>\
+                </el-select>\
+                <div style="display:flex;flex-wrap:wrap;gap:8px;">\
+                  <span v-for="(tag,idx) in form.tags" :key="idx" style="padding:4px 12px;border-radius:20px;background:var(--surface-container-highest);font-size:12px;font-weight:700;display:flex;align-items:center;gap:4px;">\
+                    {{tag}}<span class="material-symbols-outlined" style="font-size:14px;cursor:pointer;" @click="removeTag(idx)">close</span>\
+                  </span>\
+                  <el-input v-if="showTagInput" v-model="newTag" size="mini" style="width:100px;" @keyup.enter.native="addTag" @blur="addTag" ref="tagInput"></el-input>\
+                  <el-button v-else size="mini" @click="showTagInput=true" icon="el-icon-plus" style="border-style:dashed;">添加标签</el-button>\
+                </div>\
+              </div>\
+              <div class="card" style="background:rgba(64,158,255,0.06);border:1px solid rgba(0,96,169,0.1);">\
+                <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">\
+                  <div style="width:40px;height:40px;border-radius:50%;background:rgba(0,96,169,0.15);display:flex;align-items:center;justify-content:center;color:var(--primary);">\
+                    <span class="material-symbols-outlined">info</span>\
+                  </div>\
+                  <div>\
+                    <h4 style="font-size:14px;font-weight:700;">发布前检查</h4>\
+                    <p style="font-size:12px;color:var(--on-surface-variant);opacity:0.7;">所有必填项已完成 {{completionPercent}}%</p>\
+                  </div>\
+                </div>\
+                <div style="height:6px;background:var(--surface-container-low);border-radius:3px;overflow:hidden;">\
+                  <div :style="{width:completionPercent+\'%\',height:\'100%\',background:\'var(--primary)\',borderRadius:\'3px\',transition:\'width 0.3s\'}"></div>\
+                </div>\
+              </div>\
+            </div>\
+          </div>\
+        </div>',
+      data: function() {
+        return {
+          form: { name: '', slogan: '', content: '', cover: '', category: '', tags: [] },
+          isEdit: false,
+          saving: false,
+          publishing: false,
+          showTagInput: false,
+          newTag: ''
+        };
+      },
+      computed: {
+        completionPercent: function() {
+          var filled = 0;
+          var total = 4;
+          if (this.form.name) filled++;
+          if (this.form.content) filled++;
+          if (this.form.cover) filled++;
+          if (this.form.category) filled++;
+          return Math.round(filled / total * 100);
+        }
+      },
+      created: function() {
+        var id = this.$route.params.id;
+        if (id) {
+          this.isEdit = true;
+        }
+      },
+      methods: {
+        insertMd: function(before, after) {
+          var ta = this.$refs.editor;
+          if (!ta) return;
+          var start = ta.selectionStart;
+          var end = ta.selectionEnd;
+          var selected = this.form.content.substring(start, end);
+          var replacement = before + selected + after;
+          this.form.content = this.form.content.substring(0, start) + replacement + this.form.content.substring(end);
+          ta.focus();
+        },
+        triggerCoverUpload: function() {
+          this.$refs.coverInput.click();
+        },
+        handleCoverUpload: function(e) {
+          var file = e.target.files[0];
+          if (!file) return;
+          var fd = new FormData();
+          fd.append('file', file);
+          fd.append('type', 'public');
+          var token = getSecureToken();
+          var self = this;
+          var xhr = new XMLHttpRequest();
+          xhr.open('POST', '/spba-api/image/upload', true);
+          if (token) xhr.setRequestHeader('satoken', token);
+          xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4) {
+              try {
+                var res = JSON.parse(xhr.responseText);
+                if (res.code === 200 && res.data && res.data.path) {
+                  self.form.cover = res.data.path;
+                  self.$message.success('封面上传成功');
+                } else {
+                  self.$message.error(res.message || '上传失败');
+                }
+              } catch(e) { self.$message.error('上传失败'); }
+            }
+          };
+          xhr.send(fd);
+        },
+        addTag: function() {
+          if (this.newTag.trim()) {
+            this.form.tags.push(this.newTag.trim());
+            this.newTag = '';
+          }
+          this.showTagInput = false;
+        },
+        removeTag: function(idx) {
+          this.form.tags.splice(idx, 1);
+        },
+        saveDraft: function() {
+          this.saving = true;
+          var self = this;
+          setTimeout(function() {
+            self.saving = false;
+            self.$message.success('草稿已保存');
+          }, 500);
+        },
+        publishProject: function() {
+          if (!this.form.name.trim()) {
+            this.$message.warning('请输入项目名称');
+            return;
+          }
+          this.publishing = true;
+          var self = this;
+          setTimeout(function() {
+            self.publishing = false;
+            self.$message.success('项目发布成功');
+            self.$router.push('/projects');
+          }, 800);
+        }
+      }
+    };
+
+    var routes = [
+      { path: '/', component: WelcomePage },
+      { path: '/profile', component: ProfilePage },
+      { path: '/messages', component: MessagesPage },
+      { path: '/articles', component: ArticlesPage },
+      { path: '/article/edit', component: ArticleEditPage },
+      { path: '/article/edit/:id', component: ArticleEditPage },
+      { path: '/projects', component: ProjectsPage },
+      { path: '/project/edit', component: ProjectEditPage },
+      { path: '/project/edit/:id', component: ProjectEditPage }
+    ];
+
+    var router = new VueRouter({
+      routes: routes
+    });
+
+    router.beforeEach(function(to, from, next) {
+      if (!getSecureToken()) {
+        window.location.href = '/spba-api/backend/login.html';
+        return;
+      }
+      next();
+    });
+
+    new Vue({
+      el: '#app',
+      router: router,
+      data: function() {
+        return {
+          activeTopNav: 'profile',
+          userInfo: {}
+        };
+      },
+      created: function() {
+        var user = JSON.parse(localStorage.getItem('_spba_user') || '{}');
+        this.userInfo = user;
+        this.updateTopNav(this.$route.path);
+      },
+      watch: {
+        '$route': function(to) {
+          this.updateTopNav(to.path);
+        }
+      },
+      methods: {
+        updateTopNav: function(path) {
+          if (path.indexOf('/article') === 0 || path.indexOf('/project') === 0) {
+            this.activeTopNav = 'publish';
+          } else {
+            this.activeTopNav = 'profile';
+          }
+        },
+        switchTopNav: function(nav) {
+          this.activeTopNav = nav;
+          if (nav === 'profile') {
+            this.$router.push('/profile');
+          } else {
+            this.$router.push('/articles');
+          }
+        },
+        goWelcome: function() {
+          this.$router.push('/');
+        },
+        handleLogout: function() {
+          var self = this;
+          this.$confirm('确定退出登录？', '退出确认', {
+            confirmButtonText: '确定退出',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(function() {
+            apiRequest('GET', '/logout', null, function(res) {
+              clearSecureToken();
+              window.location.href = '/spba-api/backend/login.html';
+            });
+          }).catch(function() {});
+        }
+      }
+    });
+</script>
+</body>
+</html>

@@ -5,10 +5,12 @@ import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.spba.domain.entity.Member;
+import com.example.spba.domain.entity.MemberInfo;
 import com.example.spba.domain.entity.LoginLog;
 import com.example.spba.domain.entity.Role;
 import com.example.spba.dao.MemberMapper;
 import com.example.spba.service.MemberService;
+import com.example.spba.service.MemberInfoService;
 import com.example.spba.service.LoginLogService;
 import com.example.spba.service.MenuService;
 import com.example.spba.service.RoleService;
@@ -35,26 +37,36 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member> impleme
     @Autowired
     private LoginLogService loginLogService;
 
+    @Autowired
+    private MemberInfoService memberInfoService;
+
     @Override
     public HashMap checkLogin(HashMap params)
     {
         HashMap result = new HashMap();
         result.put("status", false);
 
-        HashMap info = this.baseMapper.getInfo(params);
-        if (info == null || info.get("status").equals(0)) {
+        HashMap member = this.baseMapper.getInfo(params);
+        if (member == null || member.get("status") == null || member.get("status").equals(0)) {
             result.put("message", "登录失败");
             return result;
         }
-        if (!DigestUtils.md5DigestAsHex((params.get("password") + info.get("safe").toString()).getBytes()).equals(info.get("password"))) {
+        if (!DigestUtils.md5DigestAsHex((params.get("password") + member.get("safe").toString()).getBytes()).equals(member.get("password"))) {
             result.put("message", "密码错误");
             return result;
         }
 
-        // 验证角色状态
         HashMap<String, Object> where = new HashMap<>();
         where.put("status", 1);
-        where.put("role_ids", JSONUtil.parse(info.get("role")).toBean(List.class));
+        Object roleIdsObj = member.get("role_ids");
+        if (roleIdsObj != null) {
+            try {
+                where.put("role_ids", JSONUtil.parse(roleIdsObj.toString()).toBean(List.class));
+            } catch (Exception e) {
+                result.put("message", "登录失败");
+                return result;
+            }
+        }
         List<Role> roles = roleService.getAll(where);
         if (roles.size() == 0) {
             result.put("message", "登录失败");
@@ -62,15 +74,34 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member> impleme
         }
 
         // 登录
-        StpUtil.login(info.get("id"));
+        StpUtil.login(member.get("id"));
 
         // 更新登录信息
-        updateLogin(Long.valueOf(info.get("id").toString()), params.get("ip").toString());
+        updateLogin(Long.valueOf(member.get("id").toString()), params.get("ip").toString());
 
         HashMap data = new HashMap<>();
-        data.put("avatar", info.get("avatar"));
-        data.put("username", info.get("username"));
+        data.put("id", member.get("id"));
+        data.put("username", member.get("username"));
         data.put("token", StpUtil.getTokenValue());
+        if (member.get("avatar") != null && !member.get("avatar").toString().isEmpty()) {
+            data.put("avatar", member.get("avatar"));
+        }
+
+        try {
+            Long memberId = Long.valueOf(member.get("id").toString());
+            MemberInfo memberInfo = memberInfoService.getOne(
+                new com.baomidou.mybatisplus.core.conditions.query.QueryWrapper<MemberInfo>().eq("member_id", memberId)
+            );
+            if (memberInfo != null) {
+                if (memberInfo.getNick_name() != null && !memberInfo.getNick_name().isEmpty()) {
+                    data.put("nick_name", memberInfo.getNick_name());
+                }
+                if (memberInfo.getAvatar_url() != null && !memberInfo.getAvatar_url().isEmpty()) {
+                    data.put("avatar", memberInfo.getAvatar_url());
+                }
+            }
+        } catch (Exception ignored) {}
+
         result.put("data", data);
         result.put("status", true);
 
@@ -90,7 +121,7 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member> impleme
     @Override
     public Boolean checkUsername(@NotBlank String username) {
         HashMap<String, Object> where = new HashMap<>();
-        where.put("login_code", username);
+        where.put("username", username);
         return getInfo(where) != null;
     }
 
@@ -137,11 +168,11 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member> impleme
 
     private void updateLogin(Long id, String ip)
     {
-        Member update = new Member();
-        update.setId(id);
-        update.setOpenid_qq(ip);
-        update.setLogin_time(new Date());
-        this.baseMapper.updateById(update);
+        HashMap<String, Object> updateParams = new HashMap<>();
+        updateParams.put("id", id);
+        updateParams.put("login_ip", ip);
+        updateParams.put("login_time", new Date());
+        this.baseMapper.updateLogin(updateParams);
 
         LoginLog log = new LoginLog();
         log.setAdminId(Integer.valueOf(id.toString()));

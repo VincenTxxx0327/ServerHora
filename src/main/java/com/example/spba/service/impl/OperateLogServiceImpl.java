@@ -24,7 +24,7 @@ public class OperateLogServiceImpl extends ServiceImpl<OperateLogMapper, Operate
         Member member = memberService.getById(adminId);
         OperateLog log = new OperateLog();
         log.setAdminId(adminId.intValue());
-        log.setUsername(member.getLogin_code());
+        log.setUsername(member.getUsername());
         log.setUrl(url);
         log.setMethod(method);
         log.setParams(params);

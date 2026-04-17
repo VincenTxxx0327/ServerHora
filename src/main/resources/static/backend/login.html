@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>SPBA - 登录</title>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap"
+          rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+          rel="stylesheet"/>
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css"/>
+    <link rel="stylesheet" href="css/backend.css"/>
+    <style>
+        :root {
+          --surface: #f8f9fe;
+          --surface-container-low: #f3f3f8;
+          --surface-container-lowest: #ffffff;
+          --surface-container: #edeef2;
+          --surface-container-highest: #e1e2e7;
+          --primary: #0060a9;
+          --primary-container: #409eff;
+          --on-primary: #ffffff;
+          --on-surface: #191c1f;
+          --on-surface-variant: #404752;
+          --outline-variant: #c0c7d4;
+          --outline: #707784;
+          --error: #ba1a1a;
+          --error-container: #ffdad6;
+          --tertiary: #286c00;
+          --primary-fixed: #d3e4ff;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: var(--surface); color: var(--on-surface); min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+        h1, h2, h3, .headline { font-family: 'Manrope', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .login-shell { width: 100%; max-width: 1200px; display: grid; grid-template-columns: 1fr 1fr; background: var(--surface-container-lowest); border-radius: 16px; overflow: hidden; box-shadow: 0 12px 32px -4px rgba(25, 28, 31, 0.06); }
+        .login-left { display: flex; flex-direction: column; justify-content: space-between; padding: 48px; background: linear-gradient(135deg, var(--primary), var(--primary-container)); color: var(--on-primary); position: relative; overflow: hidden; min-height: 640px; }
+        .login-left::before { content: ''; position: absolute; inset: 0; background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="g" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="1" fill="rgba(255,255,255,0.08)"/></pattern></defs><rect fill="url(%23g)" width="100" height="100"/></svg>'); pointer-events: none; }
+        .login-left .brand { position: relative; z-index: 1; display: flex; align-items: center; gap: 12px; margin-bottom: 48px; }
+        .login-left .brand-icon { width: 44px; height: 44px; background: var(--on-primary); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+        .login-left .brand-icon .material-symbols-outlined { color: var(--primary); font-size: 24px; }
+        .login-left .brand-text { font-size: 24px; font-weight: 800; letter-spacing: -0.02em; }
+        .login-left .hero { position: relative; z-index: 1; max-width: 420px; }
+        .login-left .hero h2 { font-size: 36px; font-weight: 700; line-height: 1.2; margin-bottom: 20px; }
+        .login-left .hero p { font-size: 16px; font-weight: 300; line-height: 1.7; opacity: 0.9; }
+        .login-left .footer-info { position: relative; z-index: 1; display: flex; align-items: center; gap: 20px; }
+        .login-left .footer-info p { font-size: 13px; opacity: 0.8; }
+        .login-right { display: flex; flex-direction: column; justify-content: center; padding: 64px; background: var(--surface-container-lowest); }
+        .login-right .form-header { margin-bottom: 40px; }
+        .login-right .form-header h1 { font-size: 30px; font-weight: 800; margin-bottom: 10px; }
+        .login-right .form-header p { color: var(--on-surface-variant); font-size: 15px; }
+        .form-group { margin-bottom: 24px; }
+        .form-group label { display: block; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--on-surface-variant); margin-bottom: 8px; }
+        .form-group .input-wrapper { position: relative; }
+        .form-group .input-wrapper .material-symbols-outlined { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--outline); font-size: 20px; }
+        .form-group .input-wrapper input { width: 100%; padding: 14px 16px 14px 48px; background: var(--surface-container-low); border: none; border-radius: 12px; font-size: 15px; color: var(--on-surface); outline: none; transition: box-shadow 0.2s; }
+        .form-group .input-wrapper input:focus { box-shadow: 0 0 0 2px var(--primary-container); }
+        .form-group .input-wrapper input::placeholder { color: var(--outline); }
+        .form-group .input-wrapper .toggle-pw { position: absolute; right: 16px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--outline); }
+        .form-group .input-wrapper .toggle-pw:hover { color: var(--on-surface); }
+        .remember-row { display: flex; align-items: center; gap: 8px; margin-bottom: 28px; }
+        .remember-row input[type="checkbox"] { width: 18px; height: 18px; border-radius: 6px; border: 1px solid var(--outline-variant); accent-color: var(--primary); cursor: pointer; }
+        .remember-row label { font-size: 14px; color: var(--on-surface-variant); cursor: pointer; user-select: none; }
+        .remember-row label span { color: var(--primary); font-weight: 600; }
+        .login-btn { width: 100%; padding: 16px; background: linear-gradient(135deg, var(--primary), var(--primary-container)); color: var(--on-primary); font-weight: 700; font-size: 16px; border: none; border-radius: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: opacity 0.2s, transform 0.1s; font-family: 'Manrope', sans-serif; }
+        .login-btn:hover { opacity: 0.9; }
+        .login-btn:active { transform: scale(0.98); }
+        .login-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+        .error-msg { color: var(--error); font-size: 13px; margin-top: 8px; display: none; align-items: center; gap: 4px; }
+        .error-msg.show { display: flex; }
+        .footer-meta { margin-top: auto; padding-top: 40px; text-align: center; }
+        .footer-meta p { font-size: 12px; color: var(--outline); font-weight: 500; }
+        .bg-blob-1 { position: fixed; top: -96px; left: -96px; width: 384px; height: 384px; background: rgba(0, 96, 169, 0.05); border-radius: 50%; filter: blur(80px); pointer-events: none; }
+        .bg-blob-2 { position: fixed; bottom: -96px; right: -96px; width: 384px; height: 384px; background: rgba(40, 108, 0, 0.05); border-radius: 50%; filter: blur(80px); pointer-events: none; }
+        @media (max-width: 768px) {
+          .login-shell { grid-template-columns: 1fr; max-width: 480px; }
+          .login-left { display: none; }
+          .login-right { padding: 40px 32px; }
+        }
+        .el-loading-mask { border-radius: 12px; }
+    </style>
+</head>
+<body>
+<div class="login-shell">
+    <div class="login-left">
+        <div class="brand">
+            <div class="brand-icon">
+                <span class="material-symbols-outlined">account_balance</span>
+            </div>
+            <span class="brand-text">SPBA Admin</span>
+        </div>
+        <div class="hero">
+            <h2>架构您的未来资产，洞悉每一分价值。</h2>
+            <p>SPBA 通用后台管理系统为行政级用户提供最精准的数据概览与内容流转追踪，将复杂管理化繁为简。</p>
+        </div>
+        <div class="footer-info">
+            <p>受企业级加密保护 · Sa-Token 认证体系</p>
+        </div>
+    </div>
+    <div class="login-right">
+        <div class="form-header">
+            <h1>欢迎回来</h1>
+            <p>访问您的管理控制台</p>
+        </div>
+        <form id="loginForm" onsubmit="return false;">
+            <div class="form-group">
+                <label>用户名</label>
+                <div class="input-wrapper">
+                    <span class="material-symbols-outlined">person</span>
+                    <input type="text" id="username" placeholder="请输入用户名" autocomplete="username"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>安全密码</label>
+                <div class="input-wrapper">
+                    <span class="material-symbols-outlined">lock</span>
+                    <input type="password" id="password" placeholder="请输入密码" autocomplete="current-password"/>
+                    <button type="button" class="toggle-pw" onclick="togglePassword()">
+                        <span class="material-symbols-outlined" id="pwIcon">visibility</span>
+                    </button>
+                </div>
+            </div>
+            <div class="remember-row">
+                <input type="checkbox" id="remember" checked/>
+                <label for="remember">记住登录状态 <span>(6小时)</span></label>
+            </div>
+            <div class="error-msg" id="errorMsg">
+                <span class="material-symbols-outlined" style="font-size:16px;">error</span>
+                <span id="errorText"></span>
+            </div>
+            <button type="submit" class="login-btn" id="loginBtn" onclick="handleLogin()">
+                <span>进入控制台</span>
+                <span class="material-symbols-outlined">arrow_forward</span>
+            </button>
+        </form>
+        <div class="footer-meta">
+            <p>&copy; 2024 SPBA Admin. All rights reserved.</p>
+        </div>
+    </div>
+</div>
+<div class="bg-blob-1"></div>
+<div class="bg-blob-2"></div>
+
+<script src="https://unpkg.com/vue@2/dist/vue.min.js"></script>
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script>
+    var _SECRET_KEY = 'SPBA_XOR_K3Y_2024';
+
+    function xorEncrypt(str, key) {
+      var result = '';
+      for (var i = 0; i < str.length; i++) {
+        result += String.fromCharCode(str.charCodeAt(i) ^ key.charCodeAt(i % key.length));
+      }
+      return btoa(unescape(encodeURIComponent(result)));
+    }
+
+    function xorDecrypt(encoded, key) {
+      try {
+        var str = decodeURIComponent(escape(atob(encoded)));
+        var result = '';
+        for (var i = 0; i < str.length; i++) {
+          result += String.fromCharCode(str.charCodeAt(i) ^ key.charCodeAt(i % key.length));
+        }
+        return result;
+      } catch (e) {
+        return null;
+      }
+    }
+
+    function setSecureToken(token) {
+      var encrypted = xorEncrypt(token, _SECRET_KEY);
+      localStorage.setItem('_spba_tk', encrypted);
+      localStorage.setItem('_spba_lt', Date.now().toString());
+      document.cookie = 'satoken=; path=/spba-api; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+      var authVal = btoa(Date.now().toString());
+      document.cookie = '_spba_auth=' + authVal + '; path=/spba-api; max-age=21600';
+    }
+
+    function getSecureToken() {
+      var encrypted = localStorage.getItem('_spba_tk');
+      if (!encrypted) return null;
+      var loginTime = parseInt(localStorage.getItem('_spba_lt') || '0');
+      var sixHours = 6 * 60 * 60 * 1000;
+      if (Date.now() - loginTime > sixHours) {
+        clearSecureToken();
+        return null;
+      }
+      return xorDecrypt(encrypted, _SECRET_KEY);
+    }
+
+    function clearSecureToken() {
+      localStorage.removeItem('_spba_tk');
+      localStorage.removeItem('_spba_lt');
+      localStorage.removeItem('_spba_user');
+      document.cookie = '_spba_auth=; path=/spba-api; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+    }
+
+    function isTokenValid() {
+      return getSecureToken() !== null;
+    }
+
+    function togglePassword() {
+      var pw = document.getElementById('password');
+      var icon = document.getElementById('pwIcon');
+      if (pw.type === 'password') {
+        pw.type = 'text';
+        icon.textContent = 'visibility_off';
+      } else {
+        pw.type = 'password';
+        icon.textContent = 'visibility';
+      }
+    }
+
+    function showError(msg) {
+      var el = document.getElementById('errorMsg');
+      var text = document.getElementById('errorText');
+      text.textContent = msg;
+      el.classList.add('show');
+    }
+
+    function hideError() {
+      document.getElementById('errorMsg').classList.remove('show');
+    }
+
+    function handleLogin() {
+      hideError();
+      var username = document.getElementById('username').value.trim();
+      var password = document.getElementById('password').value.trim();
+      if (!username) { showError('请输入用户名'); return; }
+      if (!password) { showError('请输入密码'); return; }
+
+      var btn = document.getElementById('loginBtn');
+      btn.disabled = true;
+      btn.innerHTML = '<span>登录中...</span>';
+
+      var xhr = new XMLHttpRequest();
+      xhr.open('POST', '/spba-api/backend/login', true);
+      xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4) {
+          btn.disabled = false;
+          btn.innerHTML = '<span>进入控制台</span><span class="material-symbols-outlined">arrow_forward</span>';
+          try {
+            var res = JSON.parse(xhr.responseText);
+            if (res.code === 200) {
+              var token = res.data.token || '';
+              if (token) {
+                setSecureToken(token);
+              }
+              var userData = {
+                username: res.data.username || username,
+                nick_name: res.data.nick_name || '',
+                avatar: res.data.avatar || '',
+                id: res.data.id || ''
+              };
+              localStorage.setItem('_spba_user', JSON.stringify(userData));
+              window.location.href = '/spba-api/backend/welcome.html';
+            } else {
+              showError(res.message || '登录失败，请检查账号密码');
+            }
+          } catch (e) {
+            showError('网络错误，请稍后重试');
+          }
+        }
+      };
+      xhr.send('username=' + encodeURIComponent(username) + '&password=' + encodeURIComponent(password));
+    }
+
+    (function() {
+      if (isTokenValid()) {
+        window.location.href = '/spba-api/backend/welcome.html';
+      }
+      document.getElementById('username').focus();
+      document.getElementById('loginForm').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') { handleLogin(); }
+      });
+    })();
+</script>
+</body>
+</html>

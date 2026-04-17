@@ -2,8 +2,8 @@ package com.example.spba.controller;
 
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.extra.servlet.ServletUtil;
+import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
-import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.spba.domain.dto.MemberDTO;
 import com.example.spba.domain.entity.Member;
@@ -22,9 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -78,7 +76,7 @@ public class MemberController {
         Member info = memberService.getById(adminId);
         if (info != null) {
             data.put("id", info.getId());
-            data.put("username", info.getLogin_code());
+            data.put("username", info.getUsername());
             data.put("role", JSONUtil.parse(info.getRole_ids()).toBean(List.class));
         }
 
@@ -105,7 +103,7 @@ public class MemberController {
 
         Member member = new Member();
         BeanUtils.copyProperties(form, member);
-        member.setLogin_code(form.getUsername());
+        member.setUsername(form.getUsername());
         member.setSafe(Function.getRandomString(4));
         member.setPassword(DigestUtils.md5DigestAsHex((form.getPassword() + member.getSafe()).getBytes()));
         member.setRole_ids(JSONUtil.parse(Function.strToIntArr(form.getRole_ids(), ",")).toString());
@@ -148,7 +146,7 @@ public class MemberController {
         Member member = new Member();
         BeanUtils.copyProperties(form, member);
         member.setRole_ids(JSONUtil.parse(Function.strToIntArr(form.getRole_ids(), ",")).toString());
-        member.setLogin_code(null);
+        member.setUsername(null);
 
         if (form.getPassword().length() > 0) {
             String pattern = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d\\W]{6,18}$";
@@ -211,11 +209,11 @@ public class MemberController {
      * @param password
      * @return
      */
-    @PostMapping("/login")
+    @PostMapping("/backend/login")
     public R login(HttpServletRequest request,
                    @NotBlank(message = "请输入账号") String username,
                    @NotBlank(message = "请输入密码") String password) {
-        HashMap where = new HashMap<>();
+        HashMap<String, String> where = new HashMap<>();
         where.put("username", username);
         where.put("password", password);
         where.put("ip", ServletUtil.getClientIP(request));
@@ -224,27 +222,8 @@ public class MemberController {
         if (res.get("status").equals(false)) {
             return R.error(res.get("message").toString());
         }
-        JSONObject data = (JSONObject) JSONObject.toJSON(res.get("data"));
-
-        List<String> perms = new ArrayList<>();
-        List<HashMap> menus = memberService.getPermissionList(StpUtil.getLoginIdAsInt());
-        Iterator<HashMap> iterator = menus.iterator();
-        while (iterator.hasNext()) {
-            HashMap menu = iterator.next();
-            if (menu.get("perms") != null && menu.get("perms").toString().length() > 0 && menu.get("type").equals("F")) {
-                perms.add(menu.get("perms").toString());
-                iterator.remove();
-            }
-            menu.remove("sort");
-            menu.remove("status");
-            menu.remove("perms");
-            menu.remove("type");
-        }
-        List<Object> tree = Function.getTree(menus, 0);
-        data.put("menu", tree);
-        data.put("perms", perms);
-
-        return R.success(data);
+        HashMap loginData = (HashMap) res.get("data");
+        return R.success(loginData);
     }
 
     /**

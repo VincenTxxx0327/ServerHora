@@ -1,6 +1,5 @@
 package com.example.spba.domain.entity;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -33,7 +32,7 @@ public class Member implements Serializable {
     /**
      * 用户名
      */
-    private String login_code;
+    private String username;
 
     /**
      * 密码
@@ -43,6 +42,7 @@ public class Member implements Serializable {
     /**
      * 角色
      */
+    @TableField(value = "role")
     private String role_ids;
 
     /**
@@ -81,9 +81,9 @@ public class Member implements Serializable {
     private Date expire_time;
 
     /**
-     * 状态：-1-未激活 0-正常 1-封号
+     * 帐号状态（0停用 1正常）
      */
-    private Long active;
+    private Long status;
 
     /**
      * 激活时间，导入或封号时反馈显示用

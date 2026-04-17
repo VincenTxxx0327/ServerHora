@@ -3,12 +3,12 @@
 <mapper namespace="com.example.spba.dao.MemberMapper">
 
     <select id="getInfo" parameterType="HashMap" resultType="HashMap">
-        SELECT a.id,a.login_code,a.password,a.role_ids,
+        SELECT a.id,a.username,a.password,a.role_ids,a.status,a.safe,
         ( SELECT sum(root) FROM role WHERE JSON_CONTAINS ( a.role_ids, CONVERT ( id, CHAR ) ) ) AS root
         FROM member a
         <where>
             <if test="id != null">AND a.id = #{id}</if>
-            <if test="login_code != null and login_code != ''">AND login_code = #{login_code}</if>
+            <if test="username != null and username != ''">AND a.username = #{username}</if>
         </where>
         limit 1
     </select>
@@ -31,5 +31,9 @@
     <select id="getRoleAdminAll" parameterType="Integer" resultType="HashMap">
         SELECT id FROM member WHERE JSON_CONTAINS( role, CONVERT(#{roleId}, CHAR))
     </select>
+
+    <update id="updateLogin" parameterType="HashMap">
+        UPDATE member SET login_ip = #{login_ip}, login_time = #{login_time} WHERE id = #{id}
+    </update>
 
 </mapper>
