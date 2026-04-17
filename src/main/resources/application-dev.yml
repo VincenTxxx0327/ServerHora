@@ -56,17 +56,18 @@ spring:
     host: 127.0.0.1
     port: 6379
     password:
-    timeout: 10000
+    timeout: 15000
     lettuce:
       pool:
         # 连接池最大连接数
-        max-active: 8
+        max-active: 16
         # 连接池中的最小空闲连接
-        min-idle: 0
+        min-idle: 4
         # 连接池中的最大空闲连接
         max-idle: 8
         # 连接池最大阻塞等待时间（使用负值表示没有限制）
-        max-wait: -1ms
+        max-wait: 30000
+      shutdown-timeout: 100
   # elasticsearch配置
   elasticsearch:
     rest:
